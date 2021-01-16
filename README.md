@@ -39,3 +39,26 @@ Copyright (C) 2016 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ```
+
+## FLASH Layout
+
+The MCU of DS213 is STM32F103VET6, with 512kB(0x80000) FLASH. The FLASH layout is as follows:
+
+| Name | Start      | Length  |
+|:----:|:----------:|:--------|
+| DFU  | 0x08000000 | 0x08000 |
+| APP  | 0x08008000 | 0x68000 |
+| FPGA | 0x08070000 | 0x0D800 |
+| LOGO | 0x0807D800 | 8310    |
+
+## Firmware Update Procedure
+
+1. Enter DS213 DFU mode.
+2. Copy FPGA_CFG.ADR to DFU disk, Then the DFU disk will restart.
+3. Copy STMU_213_018.bin to DFU disk, Then the DFU disk will restart.
+4. Copy DS213_ECHO_v20.12.25.hex to DFU disk.
+5. Restart DS213.
+
+There are no address information in the .bin file, so we put a .ADR file to DFU disk to setup the firmware start address.
+That's what step 2 did. However, the .hex file contains address information, we don't need a .ADR file.
+If your DS213 is using the official latest firmware, the FPGA is latest 018 version, you can omit step 2 and 3.
