@@ -4,7 +4,7 @@
 #include "File.h"
 #include "Sys.h"
 
-#define PARAM_VER    0x10   // 参数表版本号
+#define PARAM_VER    0x10   // Parameter table version number
 
 u8  SaveByte(u8 *p, u8 Char);
 u8  SaveRecd(u8 *p, u8 Recd);
@@ -23,7 +23,7 @@ uc8 F_NAME[][12] = {"TRACK   DAT", "TRACK   DAT", "SGNAL   BUF", "SGNAL   CSV"};
 u8  FileBuf[4096];//, TrckBuf[1440+10];
 
 /*******************************************************************************
- 求出当前颜色的对应调色板编号
+ Find the corresponding palette number of the current color
 *******************************************************************************/
 u8 Color_Num(u16 Color)
 {
@@ -43,7 +43,7 @@ u8 Color_Num(u16 Color)
   else                             return 13;
 }
 /*******************************************************************************
-  Save Parameter: 保存当前的工作参数                       Return: 0 = Success
+  Save Parameter: Save current working parameters                       Return: 0 = Success
 *******************************************************************************/
 u8 SaveParam(void)
 {
@@ -56,43 +56,43 @@ u8 SaveParam(void)
   FileName[8] = 'P', FileName[9] = 'R', FileName[10] = 'M';
   switch(OpenFileRd(FileBuf, FileName, pCluster, pDirAddr)){
     case OK:
-      Tmp[0] = *pCluster;                                       // PRM 文件存在
-      FileName[8] = 'B', FileName[9] = 'A', FileName[10] = 'K'; // 转成 BAK 文件
+      Tmp[0] = *pCluster;                                       // PRM File exists
+      FileName[8] = 'B', FileName[9] = 'A', FileName[10] = 'K'; // Convert to BAK file
       r = OpenFileWr(FileBuf, FileName, pCluster, pDirAddr);
       if(r != OK) return DISK_ERR;
       if(ReadFileSec(FileBuf, Tmp     )!= OK) return RD_ERR;
-      if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;    // 保存 BAK 文件
+      if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;    // Save BAK file
       r = CloseFile(FileBuf, 512, pCluster, pDirAddr);
       if(r != OK) return WR_ERR;
-    case NEW:                                                   // PRM 文件不存在
+    case NEW:                                                   // PRM file does not exist
       FileName[8] = 'P', FileName[9] = 'R', FileName[10] = 'M';
       r = OpenFileWr(FileBuf, FileName, pCluster, pDirAddr);
-      if(r != OK) return DISK_ERR;                              // 创建 PRM 文件
+      if(r != OK) return DISK_ERR;                              // Create PRM file
       Mem32Set((u32*)FileBuf, 0, 128);
-      *p++ =(Item << 8)+ PARAM_VER;                             // 保存参数表版本号及当前的 Item
+      *p++ =(Item << 8)+ PARAM_VER;                             // Save the parameter table version number and current Item
       for(u32 i = 0; i < ITEM_END; i++){
         *p++ = Menu[i].Val;
-        *p++ = (Menu[i].Src << 8)+(Menu[i].Flg | UPDT);         // 保存当前的 Menu
+        *p++ = (Menu[i].Src << 8)+(Menu[i].Flg | UPDT);         // Save current Menu
       }
-      for(u32 i = 0; i < 10; i++){                              // 保存偏移校正系数
+      for(u32 i = 0; i < 10; i++){                              // Save offset correction coefficient
         *p++ = Diff[CH_A][i], *p++ = Diff[CH_B][i];
       }
-      for(u32 i = 0; i < 10; i++){                              // 保存增益校正系数
+      for(u32 i = 0; i < 10; i++){                              // Save gain correction coefficient
         *p++ = pGain[CH_A*10+i], *p++ = pGain[CH_B*10+i];
       }
-      *p++ = Slope[CH_A], *p++ = Slope[CH_B];                   // 保存斜率校正系数
-      for(u32 i = 0; i < 4; i++) *p++ = (Vt[i] << 8)+Yn[i];     // 保存位置参数
-      for(u32 i = 0; i < (SPDT-3); i++) *p++ = Pop[SVOL+i].Val; // 保存音量和背光
-      for(u32 i = 0; i < 511; i++) Sum += FileBuf[i];           // 计算参数表校验和
+      *p++ = Slope[CH_A], *p++ = Slope[CH_B];                   // Save slope correction coefficient
+      for(u32 i = 0; i < 4; i++) *p++ = (Vt[i] << 8)+Yn[i];     // Save location parameters
+      for(u32 i = 0; i < (SPDT-3); i++) *p++ = Pop[SVOL+i].Val; // Save volume and backlight
+      for(u32 i = 0; i < 511; i++) Sum += FileBuf[i];           // Calculate the checksum of the parameter table
       FileBuf[511] = (~Sum)+ 1;
-      if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;    // 写入数据
+      if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;    // data input
       r = CloseFile(FileBuf, 512, pCluster, pDirAddr);
       return (r != OK) ? WR_ERR : OK;
     default: return WR_ERR;
   }
 }
 /*******************************************************************************
-  Load Parameter: 加载保存的工作参数                       Return: 0 = Success
+  Load Parameter: Load saved working parameters              Return: 0 = Success
 *******************************************************************************/
 u8 LoadParam(void)
 {
@@ -105,31 +105,32 @@ u8 LoadParam(void)
   FileName[8] = 'P', FileName[9] = 'R', FileName[10] = 'M', FileName[11] = 0;
   if(OpenFileRd(FileBuf, FileName, pCluster, pDirAddr) != OK) return RD_ERR;
   if(ReadFileSec(FileBuf, pCluster)!= OK) return RD_ERR;
-  if(PARAM_VER !=(*p & 0xFF)) return VER_ERR;               // 版本不符
+  if(PARAM_VER !=(*p & 0xFF)) return VER_ERR;               // Version does not match
   for(u32 i = 0; i < 512; i++) Sum += FileBuf[i];
-  if(Sum != 0) return SUM_ERR;                              // 校验和错
-  Item = *p++ >> 8;                                         // 加载 Curr Item
-  for(u32 i = 0; i < ITEM_END; i++){                        // 加载 Menu
+  if(Sum != 0) return SUM_ERR;                              // Checksum error
+  Item = *p++ >> 8;                                         // load Curr Item
+  for(u32 i = 0; i < ITEM_END; i++){                        // load Menu
     Menu[i].Val = *p++, Menu[i].Src = *p >> 8;
-    Menu[i].Flg = (u8)(*p++ | UPDT);                        // 全部刷新
+    Menu[i].Flg = (u8)(*p++ | UPDT);                        // Refresh all
   }
-  for(u32 i = 0; i < 10; i++){                              // 加载偏移校正系数
+  for(u32 i = 0; i < 10; i++){                              // Load offset correction coefficient
     Diff[CH_A][i] = *p++, Diff[CH_B][i] = *p++;
   }
-  for(u32 i = 0; i < 10; i++){                              // 加载增益校正系数
+  for(u32 i = 0; i < 10; i++){                              // Load gain correction coefficient
     pGain[CH_A*10+i] = *p++, pGain[CH_B*10+i] = *p++;
   }
-  Slope[CH_A] = *p++, Slope[CH_B] = *p++;                   // 加载斜率校正系数
+  Slope[CH_A] = *p++, Slope[CH_B] = *p++;                   // Load slope correction factor
 
-  for(u32 i = 0; i < 4; i++){                               // 加载位置参数
+  for(u32 i = 0; i < 4; i++){                               // oad position parameters
     Vt[i] = *p >> 8, Yn[i] = 0xFF & *p++;
   }
-  for(u32 i = 0; i < (SPDT-3); i++) Pop[SVOL+i].Val = *p++; // 加载音量和背光
+  for(u32 i = 0; i < (SPDT-3); i++) Pop[SVOL+i].Val = *p++; // Load volume and backlight
   for(u32 i = 0; i < 4; i++) Pop[i].Val = SeekMaxFileNum((u8*)&F_NAME[i][0]);
   return OK;
  }
 /*******************************************************************************
-  查找盘中当前文件类型最大的编号+1              Return: FileName with MaxNum+1
+  Find the largest number of the current file type on the disk+1
+  Return: FileName with MaxNum+1
 *******************************************************************************/
 u16 SeekMaxFileNum(u8 *FileName)
 {
@@ -148,11 +149,12 @@ u16 SeekMaxFileNum(u8 *FileName)
       pDir += 32;
     }
   }
-  if(Max >= 999) Max = -1;     // 超过 999 则从 0 开始
+  if(Max >= 999) Max = -1;     // Over 999, start from 0
   return Max+1;
 }
 /*******************************************************************************
-  BMP 格式保存当前屏幕显示图像                             Return: 0 = Success
+  BMP Format to save the current screen display image
+  Return: 0 = Success
 *******************************************************************************/
 u8 Snapshot(void)
 {
@@ -165,7 +167,7 @@ u8 Snapshot(void)
   FileName[5] = NumStr[2], FileName[6] = NumStr[3], FileName[7] = NumStr[4];
   if(OpenFileWr(FileBuf, FileName, pCluster, pDirAddr)!=OK) return DISK_ERR;
   memcpy(FileBuf, BmpHead, 54);
-  u16 i = 0x0036;                               // 调色板存放开始地址
+  u16 i = 0x0036;                               // Start address of palette storage
   for(u32 j = 0; j < 16; j++){
     FileBuf[j*4 +i+0]=(BmpColor[j]& 0xF800)>>8; // Bule
     FileBuf[j*4 +i+1]=(BmpColor[j]& 0x07E0)>>3; // Green
@@ -173,28 +175,28 @@ u8 Snapshot(void)
     FileBuf[j*4 +i+3]= 0;                       // Alpha
   }
   u16 k = 0;
-  i = 0x0076;                                   // 图像数据开始存放地址
+  i = 0x0076;                                   // Image data storage address
   for(u32 y = 0; y < 240; y++){
     for(u32 x = 0; x < 400; x += 2){
       LCD_RdBlock(x, y, x+1, y);
       FileBuf[i++] =(Color_Num(RdPxl()) << 4) | Color_Num(RdPxl());
       if(i >= SectorSize){
-        if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR; // 写入数据
+        if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR; // data input
         i = 0;
         if(y > 12){
           RowPosi(Menu[TM2].X0, Menu[TM2].Y0);
           PrintStr(TXT2C, CHAR, " Saveing     ");
         }
-        if(y > 12) PrintClk(372, 0, (k++ >> 1)& 3);            // 进度指示
+        if(y > 12) PrintClk(372, 0, (k++ >> 1)& 3);            // Progress indicator
       }
     }
   }
-  if(i != 0) if(ProgFileSec(FileBuf, pCluster) != OK) return WR_ERR; // 写入数据
+  if(i != 0) if(ProgFileSec(FileBuf, pCluster) != OK) return WR_ERR; // data input
   if(CloseFile(FileBuf, 0xBC00, pCluster, pDirAddr)!= OK) return WR_ERR;
   return 0;
 }
 /*******************************************************************************
-  保存当前屏幕波形轨迹数据                                 Return: 0 = Success
+  Save current screen waveform trace data                                 Return: 0 = Success
 *******************************************************************************/
 u8 SaveTrack(u8 FileNum)
 {
@@ -206,15 +208,15 @@ u8 SaveTrack(u8 FileNum)
   FileName[5] = NumStr[2], FileName[6] = NumStr[3], FileName[7] = NumStr[4];
   if(OpenFileWr(FileBuf, FileName, pCluster, pDirAddr)!=OK) return DISK_ERR;
   Mem32Set((u32*)FileBuf, 0, 4096/4);
-  for(u32 j = 0; j < 4; j++) Track[4*359+j] = Yn[j];     // 轨迹位置
-  Mem32Cpy((u32*)FileBuf, (u32*)Track, 360);             // 轨迹数据
-  if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR; // 写入数据
+  for(u32 j = 0; j < 4; j++) Track[4*359+j] = Yn[j];     // Track position
+  Mem32Cpy((u32*)FileBuf, (u32*)Track, 360);             // Trajectory data
+  if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR; // data input
   if(CloseFile(FileBuf, 512*4, pCluster, pDirAddr)!= OK) return WR_ERR;
   if(Pop[SWAV].Val < Pop[SWAV].Max) Pop[SWAV].Val++;
   return OK;
 }
 /*******************************************************************************
-  加载保存的屏幕波形轨迹数据    Track Data -> FileBuf      Return: 0 = Success
+  Load saved screen waveform trace data    Track Data -> FileBuf      Return: 0 = Success
 *******************************************************************************/
 u8 LoadTrack(u8 FileNum)
 {
@@ -232,7 +234,7 @@ u8 LoadTrack(u8 FileNum)
   return 0;
 }
 /*******************************************************************************
-  保存采样缓存区数据                                       Return: 0 = Success
+  Save sample buffer data                                       Return: 0 = Success
 *******************************************************************************/
 u8 SaveBuf(u8 FileNum)
 {
@@ -249,7 +251,7 @@ u8 SaveBuf(u8 FileNum)
     St = FPGA_CtrlRW(CH_A, SMPL_ST) | FPGA_CtrlRW(CH_B, SMPL_ST);
   }
   FPGA_DataWr(A_C_CH, SMPL_RPTR, 0);
-  FPGA_DataWr(B_D_CH, SMPL_RPTR, 0); // 读指针清零
+  FPGA_DataWr(B_D_CH, SMPL_RPTR, 0); // Clear the read pointer
   for(u32 i = 0; i < 4; i++){
     u8* p = FileBuf;
     for(u32 n = 0; n <1024; n++){
@@ -257,18 +259,18 @@ u8 SaveBuf(u8 FileNum)
       *p++ = SmplAC >> 8, *p++ = SmplBD >> 8;
       *p++ = SmplAC &  1, *p++ = SmplBD &  1;
     }
-    if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR; // 写入数据
+    if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR; // data input
   }
   Mem32Set((u32*)FileBuf, 0, 1024);
   u16* p =(u16*)FileBuf;
   for(u32 i = 0; i < ITEM_END; i++){
     if(i == RNA || i == RNB || i == TIM || i == T_0 || i == XNP){
       *p++ =  Menu[i].Val;
-      *p++ = (Menu[i].Src << 8)+(Menu[i].Flg | UPDT);      // 保存 Menu 中相关的项
+      *p++ = (Menu[i].Src << 8)+(Menu[i].Flg | UPDT);      // Save related items in Menu
     }
   }
-  for(u32 i = 0; i < 4; i++) *p++ = (Vt[i] << 8)+Yn[i];    // 保存位置参数
-  if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;   // 写入数据
+  for(u32 i = 0; i < 4; i++) *p++ = (Vt[i] << 8)+Yn[i];    // Save location parameters
+  if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;   // data input
   if(CloseFile(FileBuf, 0x4200, pCluster, pDirAddr)!= OK) return WR_ERR;
   if(Pop[SBUF].Val < Pop[SBUF].Max) Pop[SBUF].Val++;
   return 0;
@@ -281,7 +283,7 @@ u8 SaveByte(u8 *p, u8 Char)
   u16 pCluster[3];
   *p = Char;
   if(++p == FileBuf+SectorSize){
-    if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR; // 写入数据
+    if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR; // data input
     p = FileBuf;
   }
   return OK;
@@ -300,7 +302,8 @@ u8 SaveRecd(u8 *p, u8 Recd)
   return OK;
 }
 /*******************************************************************************
-  保存数据采集缓存区为 CSV 格式                            Return: 0 = Success
+  Save data collection buffer in CSV format
+  Return: 0 = Success
 *******************************************************************************/
 u8 SaveCsv(u8 FileNum)
 {
@@ -332,7 +335,7 @@ u8 SaveCsv(u8 FileNum)
     St = FPGA_CtrlRW(CH_A, SMPL_ST) | FPGA_CtrlRW(CH_B, SMPL_ST);
   }
   FPGA_DataWr(A_C_CH, SMPL_RPTR, 0);
-  FPGA_DataWr(B_D_CH, SMPL_RPTR, 0); // 读指针清零
+  FPGA_DataWr(B_D_CH, SMPL_RPTR, 0); // Clear the read pointer
   for(u32 i = 0; i < 4096; i++){
     u32 SmplAC = FPGA_SmplRd(A_C_CH), SmplBD = FPGA_SmplRd(B_D_CH);
     Ch[0] = SmplAC >> 8, Ch[1] = SmplBD >> 8;
@@ -343,27 +346,27 @@ u8 SaveCsv(u8 FileNum)
         if(Num[Count] == 0) break;
         FileBuf[k++] = Num[Count];
         if(k >= Len){
-          if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR; // 写入数据
+          if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR; // data input
           PrintClk(354, 0, (n++ >> 1)& 3);
           k = 0;
         }
       }
       FileBuf[k++] = 0x2c;
       if(k >= Len){
-        if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;   // 写入数据
+        if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;   // data input
         PrintClk(354, 0, (n++ >> 1)& 3);
         k = 0;
       }
     }
     FileBuf[k++] = 0x0d;
     if(k >= Len){
-      if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;     // 写入数据
+      if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;     // data input
       PrintClk(354, 0, (n++ >> 1)& 3);
       k = 0;
     }
     FileBuf[k++] = 0x0a;
     if(k >= Len){
-      if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;     // 写入数据
+      if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;     // data input
       PrintClk(354, 0, (n++ >> 1)& 3);
       k = 0;
     }
@@ -373,7 +376,7 @@ u8 SaveCsv(u8 FileNum)
     FileBuf[k++]=0x0a;
     memset(&FileBuf[k],0,(Len-k));
     k=0;
-    if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;       // 写入数据
+    if(ProgFileSec(FileBuf, pCluster)!= OK) return WR_ERR;       // data input
     PrintClk(354, 0, (n++ >> 1)& 3);
   }
   if(CloseFile(FileBuf, n*Len, pCluster, pDirAddr)!= OK) return WR_ERR;

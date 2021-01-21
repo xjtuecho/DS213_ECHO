@@ -69,10 +69,10 @@
   #define ENCD_2n         0x8000
   #define ENCDBIT         0xF000
 
-  #define CHAR            0x00   // Standard Display 字符显示
-  #define INVR            0x01   // Inverse Display  反转显示
-  #define SYMB            0x02   // Symbol Display   符号显示
-  #define VOID            0x04   // Dotted Display   虚影显示
+  #define CHAR            0x00   // Standard Display Character display
+  #define INVR            0x01   // Inverse Display  Reverse display
+  #define SYMB            0x02   // Symbol Display   Symbol display
+  #define VOID            0x04   // Dotted Display   Ghost display
 
   #define LED_PWM_MAX     1000
   #define LED_PWM_MIN     0

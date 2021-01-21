@@ -18,7 +18,7 @@ void Mem32Set(u32* p, u32 Word, u32 n)
   while(n--) *p++ = Word;
 }
 /*******************************************************************************
-  16 bites 大端模式数据转换为小端模式
+  16 bites Big-endian data is converted to little-endian
 *******************************************************************************/
 void Rev16(u16* pBuf)
 {
@@ -27,7 +27,7 @@ void Rev16(u16* pBuf)
   asm(" STRH    R1, [R0] ");
 }
 /*******************************************************************************
-  32 bites 大端模式数据转换为小端模式
+  32 bites Big-endian data is converted to little-endian
 *******************************************************************************/
 void Rev32(u32* pBuf)
 {
@@ -36,7 +36,7 @@ void Rev32(u32* pBuf)
   asm(" STR     R1, [R0] ");
 }
 /*******************************************************************************
-  计算 x 的 y 次方
+  Calculate x to the power of y
 *******************************************************************************/
 u32 Power(u8 x, u8 y)
 {
@@ -47,7 +47,7 @@ u32 Power(u8 x, u8 y)
   return m;
 }
 /*******************************************************************************
-  计算 10 的 x 次方
+  Calculate 10 to the power of x
 *******************************************************************************/
 u32 Exp(u8 x)
 {
@@ -57,7 +57,7 @@ u32 Exp(u8 x)
   return m;
 }
 /*******************************************************************************
-  在数据区中查找第 Idx 个字符串的起始地址
+  Find the starting address of the Idx string in the data area
 *******************************************************************************/
 u8* SeekStr(u8* ptr, u8 Idx)
 {
@@ -71,14 +71,14 @@ u8 Char2Nib(u8 x)
 {
   uc8 Hexcode[17]="0123456789ABCDEF";
 
-  if((x >= 'a')&&(x <= 'z')) x -=32;     // 小写改大写
+  if((x >= 'a')&&(x <= 'z')) x -=32;     // Lowercase to uppercase
   for(u8 i = 0; i < 16; i++){
-    if(Hexcode[i] == x) return i;        // 将字符转为4位十六进制数值
+    if(Hexcode[i] == x) return i;        // Convert characters to 4-digit hexadecimal values
   }
   return 0;
 }
 /*******************************************************************************
- Value2Str: 32位数转e位有效数字符串 + 量纲字符串（结构为Unit[][6]）+  模式
+ Value2Str: 32Digit to e-digit effective digit string + dimensional string (structure is Unit[][6]) + mode
 *******************************************************************************/
 void Value2Str(u8 *p, s32 n, uc8 *pUnit, s8 e, u8 Mode)
 {
@@ -91,18 +91,18 @@ void Value2Str(u8 *p, s32 n, uc8 *pUnit, s8 e, u8 Mode)
     if(n <  0){*p++ = '-'; n = -n;}
   }else *p++ = ' ';
 
-  while(m >= 10){m /= 10; i++;} // 计算 n 的有效位数 i
+  while(m >= 10){m /= 10; i++;} // Calculate the effective digits of n i
   if((i%3 == 2)&&(e == 2)) e++;
   m = n; i = 0;
   while(m >= 10){
     m /= 10;
-    if(++i > e) c *= 10;        // n 的有效位数 i 大于e则计算四舍五入值
+    if(++i > e) c *= 10;        // n If the number of significant digits i is greater than e, the rounded value is calculated
   }
-  if(i >= e) n += c;            // n 加上四舍五入值
+  if(i >= e) n += c;            // n Plus rounded value
   m = n; i = 0;
-  while(m >= 10){m /= 10; i++;} // 重新计算 n 的有效位数 i
+  while(m >= 10){m /= 10; i++;} // Recalculate the effective digits of n i
 
-  m = i/3;                      // 计算量纲单位取值偏移量
+  m = i/3;                      // Calculate the value offset of the dimension unit
   while(e--){
     *p++ = '0'+ n/Exp(i);
     if(e &&(i%3 == 0)) *p++ = '.';
@@ -111,30 +111,30 @@ void Value2Str(u8 *p, s32 n, uc8 *pUnit, s8 e, u8 Mode)
   }
   pUnit += 6*m;                 //
   do {*p++ = *pUnit;}
-  while(*pUnit++);              // 加上量纲字符字符串
+  while(*pUnit++);              // Plus dimension character string
 }
 
 /*******************************************************************************
  Two ASCII character Change to 1 Byte HEX data
 *******************************************************************************/
-u8 Str2Byte(u8 x,u8 y) // 双ASCII字符转1字节二进制数
+u8 Str2Byte(u8 x,u8 y) // Double ASCII character to 1 byte binary number
 {
   uc8 Hexcode[17]="0123456789ABCDEF";
   u8 i, Temp=0;
 
-  if(x>='a' && x<='z')  x-=32;     // 小写改大写
-  if(y>='a' && y<='z')  y-=32;     // 小写改大写
+  if(x>='a' && x<='z')  x-=32;     // Lowercase to uppercase
+  if(y>='a' && y<='z')  y-=32;     // Lowercase to uppercase
   for(i=0;i<16;i++){
-    if(Hexcode[i]==x)  Temp+=i*16; // 将字符转为高4位十六进制数值
+    if(Hexcode[i]==x)  Temp+=i*16; // Convert character to high 4 hexadecimal value
   }
   for(i=0;i<16;i++){
-    if(Hexcode[i]==y)  Temp+=i;    // 将字符转为低4位十六进制数值
+    if(Hexcode[i]==y)  Temp+=i;    // Convert characters to lower 4 hexadecimal values
   }
   return Temp;
 }
 
 /*******************************************************************************
- u16ToDec4Str: 无符号16位二进制数转4位十进制字符串，有效数字前填空格
+ u16ToDec4Str: Unsigned 16-bit binary number converted to 4-bit decimal string, with a space before the significant number
 *******************************************************************************/
 void u16To4DecStr(u8 *p, u16 n)
 {
@@ -163,7 +163,7 @@ void u16To4DecStr(u8 *p, u16 n)
   }
 }
 /*******************************************************************************
- u16ToDec5Str: 无符号16位二进制数转5位十进制字符串
+ u16ToDec5Str: Unsigned 16-bit binary number to 5-bit decimal string
 *******************************************************************************/
 void u16To5DecStr(u8 *p, u16 n)
 {
@@ -364,7 +364,7 @@ void dectostr(u8 *nStr,u8* decpos, u32 Num)
     *decpos=unit;
  }
 /*******************************************************************************
- Int32String_sign:带符号32位数转3位有效数字字符串
+ Int32String_sign:Signed 32-digit to 3 significant digit string
 *******************************************************************************/
 void Int32String_sign(I32STR_RES *r, s32 n)
 {
@@ -462,7 +462,7 @@ void Int32String_sign(I32STR_RES *r, s32 n)
   r->len = p-r->str;
 }
 /*******************************************************************************
- Int32String:无符号32位数转e位有效数字字符串
+ Int32String:Unsigned 32 digits converted to e-digit valid digit string
 *******************************************************************************/
 void Int32String(I32STR_RES *r, u32 n, u32 e)
 {

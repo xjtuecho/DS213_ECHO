@@ -32,8 +32,8 @@ uc8 Inquiry_Str[] = {0x00, 0x80, 0x02, 0x02, 36-4, 0x00, 0x00, 0x00,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                      0x00, 0x00, 0x00, 0x00};
 
-u8   *Var, *Data; // 磁盘工作区  8 位变量指针
-u32  *V32;        // 磁盘工作区 32 位变量指针
+u8   *Var, *Data; // Disk working area 8-bit variable pointer
+u32  *V32;        // Disk work area 32-bit variable pointer
 u32  SectorSize, SectorAmnt;
 
 /*******************************************************************************

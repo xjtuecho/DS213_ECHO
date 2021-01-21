@@ -1,82 +1,82 @@
 /********************* (C) COPYRIGHT 2018 e-Design Co.,Ltd. ********************
   DS213_APP main.c                                               Author : bure
 ********************************************************************************
-                               修改备注
+                               Edit notes
   ----------------------------------------------------------------------------
-  18.07.25 APP V1.01: 初始化增加了“开启 V- 及 ADC”操作
-                      初始化中恢复了 AutoCalib 操作
-  18.07.27 APP V1.02: 修正10V档位电子开关逻辑
-                      修正开机按键无响声
-  18.07.28 APP V1.03: 修复电池电压读数
-                      开机无配置文件时自动校准后保存文件
-                      配置文件不保留BAK（文件只能保持一个有效，簇号累加可能有问题）
-                      完善待机时候LED呼吸效果
-                      修复当“XP”移动到末端，断开输入信号，波形无法清除
-                      single模式锁定，采样状态位FINISH==FULL？
-                      增加音量和背光参数保存
-                      完善CH_D的运行功能
-                      完善输出口的模拟波形输出
-  18.08.08 APP V1.04: 完善FAT12文件格式和文件保存类型
-  18.08.10 APP V1.05: 增加CAL的时候按Shift时编码器累加（但没有最大最小值限制）
-                      修复T0游标越界和触发位置
-                      调整SCAN，取消NONE同步模式，SCAN等同步方式完善后修正？？？
-                      增加DUT，TH，TL
-                      <Vt触发模式不稳定，其他均可以
-  18.08.14 APP V1.06: 保存文件从编号0开始
-                      完善csv文件保存格式
-                      完善saveDat和loadDat以及CH3的调出记录波形
-                      文件保存后自动累加编号
-  18.08.15 APP V1.07: 保存文件完成提示
-                      删除TWTH
-  18.08.15 APP V1.08: 增加开机自动校准
-                      修正Buf保存格式
-                      调整采样等待时间
-  18.08.17 APP V1.09: 修正T0触发位置，（时基10us以下由于差值算法，T0与触发位置有偏移，未解决？？？）
+  18.07.25 APP V1.01: Initialization adds "Turn on V- and ADC" operation
+                      AutoCalib operation resumed during initialization
+  18.07.27 APP V1.02: Modify the logic of the 10V gear electronic switch
+                      Fixed no sound of power-on button
+  18.07.28 APP V1.03: Fix battery voltage reading
+                      Save the file after automatic calibration when there is no configuration file at startup
+                      The configuration file does not retain BAK (only one file can be kept valid, and the accumulation of cluster numbers may cause problems)
+                      Perfect LED breathing effect during standby
+                      Fix that when "XP" moves to the end and disconnects the input signal, the waveform cannot be cleared
+                      singleMode lock, sampling status bitFINISH==FULL？
+                      Increase volume and backlight parameter save
+                      Improve the operation function of CH_D
+                      Improve the analog waveform output of the output port
+  18.08.08 APP V1.04: Improve FAT12 file format and file saving type
+  18.08.10 APP V1.05: When increasing CAL, press Shift when the encoder accumulates (but there is no maximum and minimum limit)
+                      Fix T0 cursor out of bounds and trigger position
+                      Adjust SCAN, cancel NONE synchronization mode, SCAN and other synchronization methods are improved after correction? ? ?
+                      Increase DUT, TH, TL
+                      <Vt trigger mode is unstable, others are ok
+  18.08.14 APP V1.06: Save the file starting from number 0
+                      Improve the csv file save format
+                      Improve saveDat, loadDat and CH3 recall record waveform
+                      Automatically accumulate number after file is saved
+  18.08.15 APP V1.07: Save file completion prompt
+                      Remove TWTH
+  18.08.15 APP V1.08: Add automatic calibration at startup
+                      Fix Buf save format
+                      Adjust sampling waiting time
+  18.08.17 APP V1.09: Correct the trigger position of T0, (the time base is below 10us due to the difference algorithm, there is an offset between T0 and the trigger position, unresolved???)
 
-  18.08.27 APP V1.10: 修正Load DAT问题
-                      增加触发电压数值显示
-                      增加待机时间菜单选择
-  18.08.29 APP V1.11: 修正不待机时呼吸灯
-                      增加电池电压显示
+  18.08.27 APP V1.10: Fix Load DAT problem
+                      Increase the trigger voltage value display
+                      Increase standby time menu selection
+  18.08.29 APP V1.11: Fixed breathing light when not in standby
+                      Increase battery voltage display
 
-  18.09.03 APP V1.12: 修正待机时间保持参数功能
-                      增加K4按键声音反馈
-                      增加未解锁的时候，长按K4+K3关机（可能硬件不支持）
+  18.09.03 APP V1.12: Revise the function of keeping parameters in standby time
+                      Add K4 button sound feedback
+                      When the increase is not unlocked, long press K4+K3 to shut down (maybe the hardware does not support it)
 
-  18.09.27 APP V1.13: 修复低电量反复重启，电池小于3v自动关机
-                      0.5us，0.2us，0.1us 时基修改为500ns，200ns，100ns
-                      保存参数设置显示保存状态
-                      将屏幕通道显示的1234改成ABCD
-           APP V1.14: 修复低电量反复重启，电池小于3.2v自动关机
+  18.09.27 APP V1.13: Repair low battery and restart repeatedly, the battery will automatically shut down when the battery is less than 3v
+                      0.5us，0.2us，0.1us The time base is modified to500ns，200ns，100ns
+                      Save parameter settings display save status
+                      Change 1234 displayed on the screen channel to ABCD
+           APP V1.14: Repair low battery restarts repeatedly, automatic shutdown when the battery is less than 3.2v
 
-  18.11.09 APP V1.15: 改为若无开机参数配置文件时才调用开机校准，并保存开机参数
-                      消除了保存参数时屏幕显示残留，并延长了信息显示停留时间
-                      模拟输出波形采样点数，20KHz挡位时50点，其他挡位时100点
+  18.11.09 APP V1.15: If there is no power-on parameter configuration file, only call the power-on calibration and save the power-on parameters
+                      Eliminate the screen display residue when saving parameters, and extend the information display stay time
+                      Analog output waveform sampling points, 50 points at 20KHz gear, 100 points at other gears
 
-  18.12.22 APP V1.20: 配合 DFU3.73 与 FPGA STMU_213_016.bin 程序重新改写
-                      修改了 APP V1.xx 存在的各种问题
+  18.12.22 APP V1.20: Rewrite the program with DFU3.73 and FPGA STMU_213_016.bin
+                      Modified various problems in APP V1.xx
 
-  19.02.25 APP V1.21: 修改了 NORM 模式下显示波形不能保持的问题
-                      修改了按下 K4 键后其他操作后自动退出 STOP 状态的问题
+  19.02.25 APP V1.21: Modified the problem that the displayed waveform cannot be maintained in NORM mode
+                      Modified the problem of automatically exiting the STOP state after other operations after pressing the K4 key
 
-  19.03.08 APP V1.22: 修改了部分偏移误差较大的机器不能自动校正的问题
-                      修改了各种同步模式下的波形显示方式
+  19.03.08 APP V1.22: Fixed the problem that some machines with large offset errors cannot be automatically corrected
+                      Modified the waveform display mode in various synchronization modes
 
-  20.03.06 APP V1.23: 修改了暂停后改时基时频率测量出错问题，改为暂停后锁定时基
-                      修改了时基过低时频率测量出错问题，改为时基过低时停止测量
-                      配合 STMU_213_018.bin 修改了单次触发时显示出错问题
+  20.03.06 APP V1.23: Modified the frequency measurement error when changing the time base after a pause, and changed it to lock the time base after a pause
+                      Modified the frequency measurement error problem when the time base is too low, and changed it to stop the measurement when the time base is too low
+                      Cooperate with STMU_213_018.bin to modify the display error when single trigger
 
-  20.03.12 APP V1.24: 因更换 MXT2088 导致参考电压不同，修改了电压校正系数表 K1
-                      重新校正 HWD9288 电压系数表，并根据 DFU 返回 ADC 型号字
-                      符串识别自动选择对应的校正系数表
+  20.03.12 APP V1.24: The reference voltage is different due to the replacement of MXT2088, the voltage correction coefficient table K1 is modified
+                      Re-calibrate the HWD9288 voltage coefficient table and return the ADC model number according to DFU
+                      Character string recognition automatically selects the corresponding correction coefficient table
 
-  20.03.12 APP V1.25: 根据DFU中的ADC字串自动调用相应的电压系数表,修正开机没有
-                      使用U盘中设置参数的问题。
+  20.03.12 APP V1.25: According to the ADC string in the DFU, the corresponding voltage coefficient table is automatically called, and the
+                      The problem of using U disk to set parameters.
 
-  20.06.24 APP v1.26: 增加了通道A和通道B探头衰减10倍时的档位
-                      修正了SaveBuf()和SaveCSV()函数调用卡死的问题。
+  20.06.24 APP v1.26: Increase the gear position when the channel A and channel B probe attenuation 10 times
+                      Fixed the problem that the SaveBuf() and SaveCSV() function calls were stuck.
 
-  20.06.24 APP v1.27: 修改了MXT2088的ADC校准参数，修正了衰减10倍时计算值显示错误问题。
+  20.06.24 APP v1.27: Modified the ADC calibration parameters of MXT2088, and corrected the display error of the calculated value when the attenuation is 10 times.
 *******************************************************************************/
 #include "Sys.h"
 #include "DS213Bios.h"
@@ -92,12 +92,12 @@ u8  PwrDownSt = 0;
 int main(void)
 {
   pFunc1 __BiosInit = (pFunc1)0x08000101; // Point to DFU BiosInit
-  __BiosInit((u32)&Hw);                   // 加载硬件设备驱动参数
+  __BiosInit((u32)&Hw);                   // Load hardware device driver parameters
 
   NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x8000);
   while(SysTick_Config(SystemCoreClock/1000)){};
 
-/****** 仅 APP 单独 DEBUG 调试运行时采用，通过 DFU 调用时该部分不编译运行 ****
+/****** Only used when APP alone DEBUG debugging and running, this part will not be compiled and run when called by DFU ****
 
   Hw.pDevInit(PWRCTRL);
   Hw.pDevInit(KEYnDEV);
@@ -123,15 +123,15 @@ int main(void)
   AppDiskInit();
   InitFatParam();
 
-  *Hw.pOut_nPD = 1;                                // 开启 V- 及 ADC
-  Hw.pDevInit(SGNL_IN);                            // 信号输入通道初始化
-  Hw.pDevInit(SGNLOUT);                            // 信号输出通道初始化
-  Hw.pDevInit(SO_ANLG);                            // 信号输出为模拟信号
-  Hw.pDevInit(SO_DGTL);                            // 信号输出为数字信号
-  FPGA_CtrlRW(A_C_CH, CHIP_RST);                   // FPGA #0 模块复位
-  FPGA_CtrlRW(B_D_CH, CHIP_RST);                   // FPGA #1 模块复位
-  SmplStart();                                     // FPGA 开始新一轮采样
-  TrackClr();                                      // 清除显示波形轨迹
+  *Hw.pOut_nPD = 1;                                // Turn on V- and ADC
+  Hw.pDevInit(SGNL_IN);                            // Signal input channel initialization
+  Hw.pDevInit(SGNLOUT);                            // Signal output channel initialization
+  Hw.pDevInit(SO_ANLG);                            // Signal output is analog signal
+  Hw.pDevInit(SO_DGTL);                            // The signal output is a digital signal
+  FPGA_CtrlRW(A_C_CH, CHIP_RST);                   // FPGA #0 module reset
+  FPGA_CtrlRW(B_D_CH, CHIP_RST);                   // FPGA #1 module reset
+  SmplStart();                                     // FPGA starts a new round of sampling
+  TrackClr();                                      // Clear display waveform trace
 
   pGain = (strncmp((char*)Hw.pAdcTypStr, "AD9288",6)  == 0) ? &Gain0[0][0] :
           (strncmp((char*)Hw.pAdcTypStr, "HW9288",6)  == 0) ? &Gain1[0][0] :
@@ -140,135 +140,135 @@ int main(void)
 
   uc8 STR1[] = "Parameter record not found";
   uc8 STR2[] = "Reload parameter from disk";
-  uc8* STR   = (LoadParam()) ? STR1 : STR2;        // 读取预设开机参数
-  DispStr(12*8, 30, GRN, CHAR, (u8*)STR);          // 显示读取结果信息
-  *Hw.pPwm_Bkl = Pop[SBKL].Val;                    // 设置背光亮度
-  *Hw.pBuz_Vol = Pop[SVOL].Val;                    // 设置蜂鸣器音量
-  if(STR == STR1){                                 // 无预设开机参数配置文件
+  uc8* STR   = (LoadParam()) ? STR1 : STR2;        // Read the default boot parameters
+  DispStr(12*8, 30, GRN, CHAR, (u8*)STR);          // Display reading result information
+  *Hw.pPwm_Bkl = Pop[SBKL].Val;                    // Set backlight brightness
+  *Hw.pBuz_Vol = Pop[SVOL].Val;                    // Set the buzzer volume
+  if(STR == STR1){                                 // No preset boot parameter configuration file
     RowPosi(12*8, 50);
     AddStr(TXT2C, CHAR, (u8*)"Correction");
-    Correction();                                  // 各个档零点校正
+    Correction();                                  // Zero point correction for each gear
   } else Delay_mS(2000);
 
-  //****************************** 系统主循环程序 ******************************
-  SmplStart();                                                // 启动采样
+  //****************************** System main loop program ******************************
+  SmplStart();                                                // Start sampling
   TrackClr();
   KeyAct = 0;
   while (1){
-    UpdtMainMenu();                                           // 更新主界面菜单
-    DispSync();                                               // 显示同步处理
+    UpdtMainMenu();                                           // Update the main interface menu
+    DispSync();                                               // Display synchronization
     if(PopUpdt){
-      UpdtPopMenu();                                          // 更新弹出窗菜单
+      UpdtPopMenu();                                          // Update popup menu
       PopUpdt = 0;
     }
-    //============================== 按键处理循环 ==============================
+    //============================== Key processing cycle ==============================
     u16 Act = KeyAct & (ENCDBIT | K1_ACTn | K2_ACTn | K3_ACTn);
     KeyAct = 0;
-    if(Act){                                                  // 有按键或编码器动作
+    if(Act){                                                  // There are buttons or encoder actions
       u32 Track = Menu[Item].Src;
       u32 Range = Menu[(Track == CH_A)? RNA : RNB].Val;
       u16 *pKn  = &Menu[Item].Val;
       //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ K1 Push ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       if(Act & K1_ACTn){
-        if(~nKeySt & K4){                                     // 按住 K4 时按 K1
-          u32 r = Snapshot();                                 // 保存当前屏幕截图
+        if(~nKeySt & K4){                                     // Press K1 while holding K4
+          u32 r = Snapshot();                                 // Save the current screenshot
           RowPosi(Menu[TM2].X0, Menu[TM2].Y0);
           if(r == OK) AddStr(TXT2C, CHAR, " Saveing OK  ");
           else        AddStr(WARNG, CHAR, " Saveing Err ");
           Delay_mS(2000);
-          Menu[TM2].Flg |= UPDT;                              // 设置该项更新标志
-        } else {                                              // 单独按下 K1
-          Menu[RUN].Val = (Menu[RUN].Val)? STOP : SMPL;       // 切换 暂停/运行 状态
-          Menu[RUN].Flg |= UPDT;                              // 设置该项更新标志
+          Menu[TM2].Flg |= UPDT;                              // Set the update flag
+        } else {                                              // Press K1 alone
+          Menu[RUN].Val = (Menu[RUN].Val)? STOP : SMPL;       // Toggle pause/run status
+          Menu[RUN].Flg |= UPDT;                              // Set the update flag
         }
       }
       //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ K2 Push ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       if(Act & K2_ACTn){
-        if(~nKeySt & K4){                                     // 按住 K4 时按 K2
-          u32 r = SaveParam();                                // 保存当前设置参数
+        if(~nKeySt & K4){                                     // Press K2 while holding K4
+          u32 r = SaveParam();                                // Save the current setting parameters
           RowPosi(Menu[TM2].X0, Menu[TM2].Y0);
           if(r == OK) AddStr(TXT2C, CHAR, " File Saved  ");
           else        AddStr(WARNG, CHAR, " Save Error  ");
           Delay_mS(2000);
-          Menu[TM2].Flg |= UPDT;                              // 恢复TM2显示项
-        } else {                                              // 单独按下 K2
-          PopHide = (PopHide) ? 0 : 1;                        // 打开/关闭 弹出窗
-          if(!PopHide) UpdtPopMenu();                         // 更新弹出窗菜单
+          Menu[TM2].Flg |= UPDT;                              // Restore TM2 display items
+        } else {                                              // Press K2 alone
+          PopHide = (PopHide) ? 0 : 1;                        // Open/close pop-up window
+          if(!PopHide) UpdtPopMenu();                         // Update popup menu
         }
       }
       //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ K3 Push ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       if(Act & K3_ACTn){
-        if(~nKeySt & K4){                                     // 按住 K4 时按 K3
-          if(Hw.LicenceOk == 0) *Hw.pOut_PEn = 0;             // 解锁前测试关机
+        if(~nKeySt & K4){                                     // Press K3 while holding K4
+          if(Hw.LicenceOk == 0) *Hw.pOut_PEn = 0;             // Test shutdown before unlocking
           else {
             RowPosi(12*8, 120);
             AddStr(TXT2C, CHAR, (u8*)"Correction");
-            Correction();                                     // 各档零点校正
+            Correction();                                     // Zero point correction for each gear
             RowPosi(23*8, 120);
             AddStr(TXT2C, CHAR, "Completed    ");
             Delay_mS(2000);
           }
-        } else {                                              // 单独按下 K3
-          if(PopHide){                                        // 主菜单下操作
+        } else {                                              // Press K3 alone
+          if(PopHide){                                        // Operation under the main menu
             if(Item == V_T || Item == TRG){
               Menu[Item].Flg |= UPDT, Menu[Item].Src += 1;
-              Menu[Item].Src &= 3;                            // 选择 CH A~D
+              Menu[Item].Src &= 3;                            // select CH A~D
               Menu[V_T].Src = Menu[Item].Src;
-              Menu[V_T].Flg |= UPDT;                          // 三项数据同步
+              Menu[V_T].Flg |= UPDT;                          // Three data synchronization
               Menu[TRG].Src = Menu[Item].Src;
               Menu[TRG].Flg |= UPDT;
               Menu[T_0].Src = Menu[Item].Src;
               Menu[T_0].Flg |= UPDT;
             } else if(Item == YNP || Item == TM1 || Item == TM2){
               Menu[Item].Src += 1;
-              Menu[Item].Src &= 3;                            // 选择 CH A~D
+              Menu[Item].Src &= 3;                            //select CH A~D
               Menu[Item].Flg |= UPDT;
             } else if(Item == VM1 || Item == VM2 || Item == CAL){
               Menu[Item].Src += 1;
-              Menu[Item].Src &= 1;                            // 选择 CH A/B
+              Menu[Item].Src &= 1;                            // select CH A/B
               Menu[Item].Flg |= UPDT;
             } else if(Item >= V_1 && Item <= T_2) Menu[Item].Flg ^= INVR;
-          } else PopProcess();                                // 弹出窗内操作
+          } else PopProcess();                                // Operation in the pop-up window
         }
       }
       //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Indx Encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       if(Act & ENCD_1n || Act & ENCD_1p){
-        u32 Inc   = (~nKeySt & K4) ? 10 : 1;                  // 按住 K4 时增量 *10
-        if(PopHide){                                          // 主菜单下的操作
+        u32 Inc   = (~nKeySt & K4) ? 10 : 1;                  // Increment when K4 is pressed *10
+        if(PopHide){                                          // Operations under the main menu
           Menu[Item].Flg |= UPDT;
           if     (Item == V_T) pKn = &Vt[Track];
           else if(Item == YNP) pKn = &Yn[Track];
           else if(Item == CAL) pKn = &Diff[Track][Range];
-          if((Item == VM1 || Item == VM2)&& *pKn == RMS){     // 离开有效值测量时
-            Menu[T_1].Flg &= ~INVR, Menu[T_2].Flg &= ~INVR;   // 消隐 T1,T2 游标
+          if((Item == VM1 || Item == VM2)&& *pKn == RMS){     // When leaving the effective value measurement
+            Menu[T_1].Flg &= ~INVR, Menu[T_2].Flg &= ~INVR;   // Blanking T1, T2 cursors
           }
-          u32 Undo1 = (Track >= CH_C && Item == V_T)? 1 : 0;  // 数字通道不调 V_T
+          u32 Undo1 = (Track >= CH_C && Item == V_T)? 1 : 0;  // Digital channel does not adjust V_T
           u32 Limit = (Item <= RNB || Item == TIM)  ? 1 : 0;
-          u32 Undo2 = (Menu[RUN].Val == STOP && Limit);       // 暂停时不调量程
+          u32 Undo2 = (Menu[RUN].Val == STOP && Limit);       // No range adjustment during pause
           if(!Undo1 && !Undo2){
             if(Act & ENCD_1n) *pKn =IndxInc(*pKn, Inc, Item); // Indx+
             else              *pKn =IndxDec(*pKn, Inc, Item); // Indx-
           }
-          if(Menu[SYN].Val == NORM && Limit) TrackClr();      // NORM 清屏补丁
+          if(Menu[SYN].Val == NORM && Limit) TrackClr();      // NORM Clear screen patch
 
-          if(Menu[OUT].Val < 3 && Menu[FRQ].Val > 10){        // OUT 补丁
-            Menu[FRQ].Val  = 10;                              // 限制 <=20KHz
+          if(Menu[OUT].Val < 3 && Menu[FRQ].Val > 10){        // OUT patch
+            Menu[FRQ].Val  = 10;                              // limit <=20KHz
             Menu[FRQ].Flg |= UPDT;
           }
-          if(Menu[SYN].Val == ROLL){                          // ROLL 限制 >=20mS
+          if(Menu[SYN].Val == ROLL){                          // ROLL limit >=20mS
             if(Menu[TIM].Val > ROLL_20MS) Menu[TIM].Val = ROLL_20MS;
             Menu[TIM].Flg |= UPDT;
-            Menu[XNP].Val = 0, Menu[XNP].Flg |= UPDT;         // 限制窗口位置
+            Menu[XNP].Val = 0, Menu[XNP].Flg |= UPDT;         // Limit window position
           }
-          if(Menu[SYN].Val <= NORM){                          // AUTO, NORM 补丁
+          if(Menu[SYN].Val <= NORM){                          // AUTO, NORM patch
             if(Menu[RUN].Val == STOP && !Trigg){
-              Menu[XNP].Val = 0;                              // 限制窗口位置
+              Menu[XNP].Val = 0;                              // Limit window position
               Menu[XNP].Flg |= UPDT;
             }
           }
-          //判断是否需要切换电压选择等级的字符串
+          //Judge whether it is necessary to switch the string of voltage selection level
           updata_RNAB_p();
-        } else {                                              // 弹出窗下的操作
+        } else {                                              // Operations under the pop-up window
           PopUpdt = 1;
           if(Act & ENCD_1n) PopValInc(Line, Inc);             // Line+
           else              PopValDec(Line, Inc);             // Line-
@@ -276,47 +276,47 @@ int main(void)
       }
       //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Item+ Encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       if(Act & ENCD_2p){
-        Menu[Item].Flg |= FLSH;                               // 前项置闪烁标志
-        if(PopHide){                                          // 主菜单下的操作
-          Item = (Item >= VM1) ? 0 : Item+1;                  // 当前项+1
-        } else {                                              // 弹出窗下的操作
-          Line = (Line == SPDT) ? 0 : Line+1;                 // 当前行+1
+        Menu[Item].Flg |= FLSH;                               // Set flashing flag in front item
+        if(PopHide){                                          // Operations under the main menu
+          Item = (Item >= VM1) ? 0 : Item+1;                  // Current item +1
+        } else {                                              // Operations under the pop-up window
+          Line = (Line == SPDT) ? 0 : Line+1;                 // Current row +1
           PopUpdt = 1;
         }
       }
       //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Item- Encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       if(Act & ENCD_2n){
-        Menu[Item].Flg |= FLSH;                               // 前项置闪烁标志
-        if(PopHide){                                          // 主菜单下的操作
-          Item = (Item > 0) ? Item-1 : VM1;                   // 当前项-1
-        } else {                                              // 弹出窗下的操作
-          Line = (Line > 0) ? Line-1 : SPDT;                  // 当前行-1
+        Menu[Item].Flg |= FLSH;                               // Set flashing flag in front item
+        if(PopHide){                                          // Operations under the main menu
+          Item = (Item > 0) ? Item-1 : VM1;                   // Current item-1
+        } else {                                              // Operations under the pop-up window
+          Line = (Line > 0) ? Line-1 : SPDT;                  // Current row-1
           PopUpdt = 1;
         }
       }
       //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       Beep_mS(20);
-      if(Pop[SPDT].Val != 0) PD_Cnt = Pop[SPDT].Val*60;       // 重置休眠计时器
+      if(Pop[SPDT].Val != 0) PD_Cnt = Pop[SPDT].Val*60;       // Reset sleep timer
     }
-    //==============================如果通道有信号输入,则重置计数值===================
+    //==============================f the channel has signal input, reset the count value===================
     if(*Hw.pSt_Vin == 1){
-      PD_Cnt = Pop[SPDT].Val*60;                              // 重置休眠计时器
+      PD_Cnt = Pop[SPDT].Val*60;                              // Reset sleep timer
 
     }
 
-    //==============================判断是否进入省电模式=============================
-    if(PD_Cnt == 0 && PwrDownEn && *Hw.pSt_Vin == 0){         // 进入省电状态
-      Hw.pPowerDown(ENABLE);                                  // 低功耗供电模式
-      *Hw.pPwm_Bkl = 0;                                       // 关闭背光
-      *Hw.pOut_Clr = 1;                                       // FPGA 省电状态
+    //==============================Determine whether to enter power saving mode=============================
+    if(PD_Cnt == 0 && PwrDownEn && *Hw.pSt_Vin == 0){         // Enter power saving state
+      Hw.pPowerDown(ENABLE);                                  // Low power consumption mode
+      *Hw.pPwm_Bkl = 0;                                       // Turn off the backlight
+      *Hw.pOut_Clr = 1;                                       // FPGA Power saving status
       PwrDownSt = 1;
-    } else if(PwrDownSt == 1){                                // 恢复运行状态
-      Hw.pPowerDown(DISABLE);                                 // 正常供电模式
-      *Hw.pPwm_Bkl = Pop[SBKL].Val;                           // 恢复背光
-      *Hw.pOut_Clr = 0;                                       // FPGA 运行状态
-      *Hw.pPwm_LED = LED_PWM_MAX;                             // 关闭呼吸灯
+    } else if(PwrDownSt == 1){                                // Restore operation
+      Hw.pPowerDown(DISABLE);                                 // Normal power supply mode
+      *Hw.pPwm_Bkl = Pop[SBKL].Val;                           // Restore backlight
+      *Hw.pOut_Clr = 0;                                       // FPGA Operating status
+      *Hw.pPwm_LED = LED_PWM_MAX;                             // Turn off the breathing light
       PwrDownSt = 0;
-      PD_Cnt = Pop[SPDT].Val*60;                              // 重置休眠计时器
+      PD_Cnt = Pop[SPDT].Val*60;                              // Reset sleep timer
     }
   }
   return 0;

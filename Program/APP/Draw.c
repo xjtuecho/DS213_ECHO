@@ -23,17 +23,17 @@ uc16 CLK_IMG[]    =  {0x000,0x000,0x000,0x000,0x070,0x3FF,0x070,0x000,
                       0x020,0x000,0x200,0x100,0x080,0x070,0x070,0x070,
                       0x008,0x004,0x002,0x000};
 
-uc16 FONT_8x11[]  =  {0x008,0x004,0x008,0x020,0x080,0x100,0x080,0x020, // " 正弦波
-                      0x010,0x004,0x010,0x040,0x100,0x400,0x100,0x040, // # 三角波
-                      0x200,0x100,0x080,0x040,0x020,0x010,0x008,0x3FC, // $ 锯齿波
+uc16 FONT_8x11[]  =  {0x008,0x004,0x008,0x020,0x080,0x100,0x080,0x020, // " Sine wave
+                      0x010,0x004,0x010,0x040,0x100,0x400,0x100,0x040, // # Triangle wave
+                      0x200,0x100,0x080,0x040,0x020,0x010,0x008,0x3FC, // $ Sawtooth wave
                       0x30C,0x18C,0x0C0,0x060,0x030,0x318,0x30C,0x000, // %
                       0x000,0x180,0x260,0x21C,0x26A,0x284,0x140,0x000, // &
-                      0x202,0x202,0x202,0x202,0x202,0x202,0x3FE,0x000, // ' 电池尾空
+                      0x202,0x202,0x202,0x202,0x202,0x202,0x3FE,0x000, // ' Battery tail empty
                       0x000,0x000,0x0F8,0x1FC,0x306,0x202,0x000,0x000, // (
                       0x000,0x000,0x202,0x306,0x1FC,0x0F8,0x000,0x000, // )
                       0x000,0x18C,0x0D8,0x070,0x070,0x0D8,0x18C,0x000, // *  ×
                       0x000,0x020,0x020,0x0F8,0x0F8,0x020,0x020,0x000, // +
-                      0x004,0x004,0x004,0x3FC,0x200,0x200,0x200,0x3FC, // , 矩形波
+                      0x004,0x004,0x004,0x3FC,0x200,0x200,0x200,0x3FC, // , Rectangular wave
                       0x000,0x020,0x020,0x020,0x020,0x020,0x020,0x000, // -
                       0x000,0x000,0x300,0x300,0x000,0x000,0x000,0x000, // .
                       0x180,0x0C0,0x060,0x030,0x018,0x00C,0x006,0x000, // /
@@ -48,12 +48,12 @@ uc16 FONT_8x11[]  =  {0x008,0x004,0x008,0x020,0x080,0x100,0x080,0x020, // " 正�
                       0x1DC,0x3FE,0x222,0x222,0x222,0x3FE,0x1DC,0x000, // 8
                       0x01C,0x23E,0x222,0x222,0x322,0x1FE,0x0FC,0x000, // 9
                       0x000,0x000,0x000,0x198,0x198,0x000,0x000,0x000, // :
-                      0x2FA,0x2FA,0x2FA,0x2FA,0x2FA,0x2FA,0x2FA,0x2FA, // ; 电池身
+                      0x2FA,0x2FA,0x2FA,0x2FA,0x2FA,0x2FA,0x2FA,0x2FA, // ; Battery body
                       0x000,0x020,0x070,0x0D8,0x18C,0x306,0x202,0x000, // <
                       0x090,0x090,0x090,0x090,0x090,0x090,0x000,0x000, // =
                       0x000,0x202,0x306,0x18C,0x0D8,0x070,0x020,0x000, // >
                       0x018,0x01C,0x004,0x344,0x364,0x03C,0x018,0x000, // ?
-                      0x000,0x000,0x780,0x000,0x780,0x480,0x780,0x000,  // @ 下标10
+                      0x000,0x000,0x780,0x000,0x780,0x480,0x780,0x000,  // @ Subscript 10
                       0x3F0,0x3F8,0x04C,0x046,0x04C,0x3F8,0x3F0,0x000, // A
                       0x202,0x3FE,0x3FE,0x222,0x222,0x3FE,0x1DC,0x000, // B
                       0x0F8,0x1FC,0x306,0x202,0x202,0x306,0x18C,0x000, // C
@@ -80,12 +80,12 @@ uc16 FONT_8x11[]  =  {0x008,0x004,0x008,0x020,0x080,0x100,0x080,0x020, // " 正�
                       0x306,0x3DE,0x0F8,0x020,0x0F8,0x3DE,0x306,0x000, // X
                       0x000,0x01E,0x23E,0x3E0,0x3E0,0x23E,0x01E,0x000, // Y
                       0x38E,0x3C6,0x262,0x232,0x31E,0x38E,0x000,0x000, // Z
-                      0x200,0x300,0x2C0,0x220,0x218,0x204,0x3FE,0x000, // [ 三角
-                      0x000,0x022,0x042,0x1FE,0x3FE,0x240,0x220,0x000, // \下降沿
-                      0x020,0x010,0x008,0x006,0x008,0x010,0x020,0x020, // ] 指针
-                      0x000,0x220,0x210,0x3FC,0x3FE,0x012,0x022,0x000, // ^ 上升沿
-                      0x000,0x200,0x200,0x200,0x200,0x200,0x200,0x000, // _ 下横线
-                      0x202,0x202,0x202,0x202,0x202,0x202,0x202,0x202, // ` 电池身空
+                      0x200,0x300,0x2C0,0x220,0x218,0x204,0x3FE,0x000, // [ Triangle
+                      0x000,0x022,0x042,0x1FE,0x3FE,0x240,0x220,0x000, // \Falling edge
+                      0x020,0x010,0x008,0x006,0x008,0x010,0x020,0x020, // ] pointer
+                      0x000,0x220,0x210,0x3FC,0x3FE,0x012,0x022,0x000, // ^ Rising edge
+                      0x000,0x200,0x200,0x200,0x200,0x200,0x200,0x000, // _ underline
+                      0x202,0x202,0x202,0x202,0x202,0x202,0x202,0x202, // ` Empty battery
                       0x1C0,0x3E8,0x228,0x228,0x1F8,0x3F0,0x200,0x000, // a
                       0x202,0x3FE,0x1FE,0x220,0x220,0x3E0,0x1C0,0x000, // b
                       0x1E0,0x3F0,0x210,0x210,0x210,0x330,0x120,0x000, // c
@@ -112,23 +112,23 @@ uc16 FONT_8x11[]  =  {0x008,0x004,0x008,0x020,0x080,0x100,0x080,0x020, // " 正�
                       0x208,0x318,0x1B0,0x0E0,0x1B0,0x318,0x208,0x000, // x
                       0x038,0x278,0x240,0x240,0x240,0x1F8,0x0F8,0x000, // y
                       0x318,0x388,0x2C8,0x268,0x238,0x318,0x000,0x000, // z
-                      0x0F8,0x088,0x38E,0x222,0x2FA,0x2FA,0x2FA,0x2FA, // { 电池头
+                      0x0F8,0x088,0x38E,0x222,0x2FA,0x2FA,0x2FA,0x2FA, // { Battery head
                       0x000,0x000,0x000,0x3FE,0x3FE,0x000,0x000,0x000, // |
-                      0x2FA,0x2FA,0x2FA,0x2FA,0x2FA,0x202,0x3FE,0x000, // } 电池尾
-                      0x0F8,0x088,0x38E,0x202,0x202,0x202,0x202,0x202}; // ~ 空电池头
+                      0x2FA,0x2FA,0x2FA,0x2FA,0x2FA,0x202,0x3FE,0x000, // } Battery tail
+                      0x0F8,0x088,0x38E,0x202,0x202,0x202,0x202,0x202}; // ~ Empty battery head
 
-uc16 Palette[] = {CYAN, YEL, PRPL, GRN, CYAN_, YEL_, PRPL_, GRN_, // 主屏显示调色板
+uc16 Palette[] = {CYAN, YEL, PRPL, GRN, CYAN_, YEL_, PRPL_, GRN_, // Home screen display palette
                   BLK,  RED, WHT,  GRN, BLUE,  GRAY, ORNG,  DARK};
 
-uc16 HueTab[4] = {GRAY, CYAN, YEL, WHT}; // Pop Window 色调编号（color(0~1)bit, 透明 0/1（2~3)bit
+uc16 HueTab[4] = {GRAY, CYAN, YEL, WHT}; // Pop Window Hue number（color(0~1)bit, Transparent 0/1（2~3)bit
 
-u8   PopHide = 1;              // Pop Window 显示/消隐标志
-u32  PopBuf[1500];             // Pop Window 显示缓冲区
-u16  Nx0, Ny0;                 // Pop Window 内信息当前显示位置
-u16  Bx1, Bx2, By1, By2;       // Pop Window 在主屏显示区中起始位置
-u8   YnHide[4] = {0, 0, 0, 0}; // Track1~4迹显示/消隐标志
-u8   Track[(X_SIZE+1)*4];      // 轨迹缓存: i+0,i+1,i+2,i+3, 为 1～4 号轨迹数据
-u8   TrackRoll[(X_SIZE+1)*4];  // 滚屏轨迹缓存:
+u8   PopHide = 1;              // Pop Window Display/blanking signs
+u32  PopBuf[1500];             // Pop Window Display buffer
+u16  Nx0, Ny0;                 // Pop Window Current display position of internal information
+u16  Bx1, Bx2, By1, By2;       // Pop Window Start position in the main screen display area
+u8   YnHide[4] = {0, 0, 0, 0}; // Track1~4Trace display/blanking sign
+u8   Track[(X_SIZE+1)*4];      // Trajectory buffer: i+0,i+1,i+2,i+3, 为 1～4 Track data
+u8   TrackRoll[(X_SIZE+1)*4];  // Scrolling track cache:
 
 /*******************************************************************************
   Setup Pop Window
@@ -147,15 +147,15 @@ void PopProcess(void)
 {
   u8 r = 0;
   Nx0 = Pop[7].X0, Ny0 = Pop[7].Y0;
-  PopSTR(Pop[7].Src, 0, (u8*)Pop[7].STR+11);     // 清除 " Press K3 "
+  PopSTR(Pop[7].Src, 0, (u8*)Pop[7].STR+11);     // Clear " Press K3 "
   Nx0 = Pop[8].X0, Ny0 = Pop[8].Y0;
-  if(Line >= SVOL) r = SaveParam();              // 保存当前设置参数
+  if(Line >= SVOL) r = SaveParam();              // Save the current setting parameters
   if(Line == SWAV) r = SaveTrack(Pop[Line].Val);
   if(Line == LWAV) r = LoadTrack(Pop[Line].Val);
   if(Line == SBUF) r = SaveBuf(Pop[Line].Val);
   if(Line == SCSV) r = SaveCsv(Pop[Line].Val);
   u8 n = (r == OK) ? 11 : 22;
-  PopSTR(Pop[8].Src, 0, (u8*)Pop[8].STR+n); // 显示 "Completed " 或 "  Error   "
+  PopSTR(Pop[8].Src, 0, (u8*)Pop[8].STR+n); // display "Completed " or "  Error   "
   DisplayWaveForm();
   Delay_mS(1000);
   PopUpdt = 1;
@@ -163,7 +163,7 @@ void PopProcess(void)
 /*******************************************************************************
   UpdtPopMenu
 *******************************************************************************/
-void UpdtPopMenu(void)           //弹出菜单
+void UpdtPopMenu(void)           //Popup menu
 {
   SetPopWindow(200, 40, 200+11*8, 40+8*18);
   u8 NumStr[6];
@@ -177,16 +177,16 @@ void UpdtPopMenu(void)           //弹出菜单
       u16To4DecStr(NumStr, Pop[i].Val);
       PopSTR(Pop[i].Src, (i == Line) ? 1 : 0, (u8*)&NumStr[1]);
       PopSTR(Pop[i].Src, (i == Line) ? 1 : 0, "%");
-    } else if(Pop[i].Flg & TCNT){                       // 设置休眠计时器
+    } else if(Pop[i].Flg & TCNT){                       // Set sleep timer
       if(Pop[i].Val > 0){
         u16To5DecStr(NumStr, Pop[i].Val);
         PopSTR(Pop[i].Src, (i == Line) ? 1 : 0, (u8*)&NumStr[3]);
         PopSTR(Pop[i].Src, (i == Line) ? 1 : 0, "m");
-        PD_Cnt = Pop[i].Val*60;                         // 重置休眠计时器
+        PD_Cnt = Pop[i].Val*60;                         // Reset sleep timer
         PwrDownEn = 1;
       } else {
         PopSTR(Pop[i].Src, (i == Line) ? 1 : 0, "Off");
-        PD_Cnt = 1000*60;                               // 重置休眠计时器
+        PD_Cnt = 1000*60;                               // Reset sleep timer
         PwrDownEn = 0;
       }
     }
@@ -203,7 +203,7 @@ void UpdtPopMenu(void)           //弹出菜单
   PopSTR(Pop[7+1].Src, 0, (u8*)Pop[7+1].STR);
 }
 /*******************************************************************************
-  Pop Window 像素设置     HueNum: (0~3)     像素定位: Nx0, Ny0
+  Pop Window Pixel settings     HueNum: (0~3)     Pixel positioning: Nx0, Ny0
 *******************************************************************************/
 void PopPixle(u8 HueNum)
 {
@@ -214,7 +214,7 @@ void PopPixle(u8 HueNum)
   if(++Ny0 == (By2-By1)) Ny0 = 0, Nx0++;
 }
 /*******************************************************************************
-  Pop Window 字符串打印    Hue: BackGrndNum bit2~3 + ForeGrndNum bit0~1
+  Pop Window String printing    Hue: BackGrndNum bit2~3 + ForeGrndNum bit0~1
 *******************************************************************************/
 void PopSTR(u8 Hue, u8 Inv, u8 *s)
 {
@@ -223,11 +223,11 @@ void PopSTR(u8 Hue, u8 Inv, u8 *s)
 
   while(*s != 0){
     Nx0--;
-    for(u32 i = 0; i < 12; i++) PopPixle(ForeGrnd); // 字符前增加一空白列
+    for(u32 i = 0; i < 12; i++) PopPixle(ForeGrnd); // Add a blank column before the character
     Nx0++, Ny0 -= 12;
     for(u32 i = 0; i < 8; i++){
-      u32 b = (*s <= 0x21) ? 0 : FONT_8x11[((*s-0x22)*8)+i];    //!以及以后的不显示否则显示字符 应该是0x20 不是0x21
-      if((*s == 0x21) && (i == 4)) break;   //如果是第5个字为! 就跳出
+      u32 b = (*s <= 0x21) ? 0 : FONT_8x11[((*s-0x22)*8)+i];    //! And the subsequent ones are not displayed otherwise the displayed characters should be0x20 Is not0x21
+      if((*s == 0x21) && (i == 4)) break;   //If it is the 5th word, it will jump out
       for(u32 j = 0; j < 12; ++j){
         PopPixle(((b << j) & 0x800) ? BackGrnd : ForeGrnd);
       }
@@ -237,7 +237,7 @@ void PopSTR(u8 Hue, u8 Inv, u8 *s)
   }
 }
 /*******************************************************************************
-  Pop Window 边框打印     Hue: BackGrndNum bit2~3 + ForeGrndNum bit0~1
+  Pop Window Border printing     Hue: BackGrndNum bit2~3 + ForeGrndNum bit0~1
 *******************************************************************************/
 void SetPopSide(u8 Hue)
 {
@@ -274,11 +274,11 @@ void RowPosi(u16 x, u16 y)
 *******************************************************************************/
 void PrintStr(u8 ColorNo, u8 Mode, u8 *Str)
 {
-  //Palette 为颜色数组
+  //Palette Is the color array
   u16 ForeGrnd = Palette[(Mode) ? BLANK : ColorNo];
   u16 BackGrnd = Palette[(Mode) ? ColorNo : BLANK];
-  for(u32 j = 0; j < 12; ++j) WrPxl(BackGrnd);//画前排一个数线
-  //从左往右,从上往下画
+  for(u32 j = 0; j < 12; ++j) WrPxl(BackGrnd);//Draw a number line in the front row
+  //Draw from left to right, from top to bottom
   while(*Str != 0){
     for(u32 i = 0; i < 8; i++){
       u16 b = (*Str <= '!') ? 0 : FONT_8x11[((*Str-0x22)*8)+i];
@@ -309,7 +309,7 @@ void AddStr(u8 ColorNo, u8 Mode, u8 *Str)
 }
 
 /*******************************************************************************
- PrintClk: 进度指示
+ PrintClk: Progress indicator
 *******************************************************************************/
 void PrintClk(u16 x, u16 y, u8 Phase)
 {
@@ -324,10 +324,10 @@ void PrintClk(u16 x, u16 y, u8 Phase)
 /*******************************************************************************
 
 *******************************************************************************/
-void DrawTags(void)   //通道游标
+void DrawTags(void)   //Channel cursor
 {
   u16 Buf0[256], Buf1[256];
-  LCD_WrBlock(0, MIN_Y-1, 10, MIN_Y+Y_SIZE+1); // 设 Tag 显示窗
+  LCD_WrBlock(0, MIN_Y-1, 10, MIN_Y+Y_SIZE+1); // Assume Tag Display window
   for(u16 x = 0; x <= 10; x++){
     u16* p = (x & 1) ? Buf1 : Buf0;
     u32* p32 = (u32*)p;
@@ -352,7 +352,7 @@ void DrawTags(void)   //通道游标
   Hw.pLCD_DmaWait();
 }
 /*******************************************************************************
-  更新信号标签
+  Update signal label
 *******************************************************************************/
 void UpdateTag(void)
 {
@@ -380,7 +380,7 @@ void UpdateTag(void)
   for(u8 y = 0; y < 5; y++) WrPxl(V2C);       // Right Side Tag
 
   u16 T0C = Palette[Menu[V_T].Src];
-  s16 T0P = (Menu[T_0].Val-Menu[XNP].Val)*30; // T0 标线位置
+  s16 T0P = (Menu[T_0].Val-Menu[XNP].Val)*30; // T0 Marking position
   if((T0P > 0)&&(T0P < X_SIZE)) for(u16 x = T0P+MIN_X-2; x < T0P+MIN_X+3; x++){
     PxlPosi(x, MIN_Y-1);
     WrPxl(T0C);                               // T0 Bottom Side Tag
@@ -410,39 +410,39 @@ void UpdateTag(void)
 void DisplayWaveForm(void)
 {
   u16 Buf0[210], Buf1[210];
-  u16 T0P = (Menu[T_0].Val-Menu[XNP].Val)*30;                // T0 标线位置
-  u16 T1P = Menu[T_1].Val, T2P = Menu[T_2].Val;              // T1,T2 游标位置
-  u16 V1P = Menu[V_1].Val, V2P = Menu[V_2].Val;              // V1,V2 游标位置
-  u16 VtS = Menu[V_T].Src;                                   // Vt 来源
-  u16 VtP = Vt[VtS];                                         // Vt 标线位置
-  u16 VtC = Palette[VtS];                                    // Vt 信源颜色
-  u16 GrC = Palette[GRIDC];                                  // 格线颜色
-  u16 BgC = Palette[BLANK];                                  // 背景颜色
-  u16 CsC = Palette[CURSR];                                  // V/T1~2 游标颜色
+  u16 T0P = (Menu[T_0].Val-Menu[XNP].Val)*30;                // T0 Marking position
+  u16 T1P = Menu[T_1].Val, T2P = Menu[T_2].Val;              // T1,T2 Cursor position
+  u16 V1P = Menu[V_1].Val, V2P = Menu[V_2].Val;              // V1,V2 Cursor position
+  u16 VtS = Menu[V_T].Src;                                   // Vt source
+  u16 VtP = Vt[VtS];                                         // Vt Marking position
+  u16 VtC = Palette[VtS];                                    // Vt Source color
+  u16 GrC = Palette[GRIDC];                                  // Grid color
+  u16 BgC = Palette[BLANK];                                  // background color
+  u16 CsC = Palette[CURSR];                                  // V/T1~2 Cursor color
 
-  u16 T0F = Menu[T_0].Flg & INVR;                            // T0 标线显示标志
-  u16 T1F = Menu[T_1].Flg & INVR;                            // T1 游标显示标志
-  u16 T2F = Menu[T_2].Flg & INVR;                            // T1 游标显示标志
-  u16 V1F = Menu[V_1].Flg & INVR;                            // V1 游标显示标志
-  u16 V2F = Menu[V_2].Flg & INVR;                            // V2 游标显示标志
-  u16 VtF = Menu[V_T].Flg & INVR;                            // Vt 游标显示标志
+  u16 T0F = Menu[T_0].Flg & INVR;                            // T0 Marking display signs
+  u16 T1F = Menu[T_1].Flg & INVR;                            // T1 Cursor display flag
+  u16 T2F = Menu[T_2].Flg & INVR;                            // T1 Cursor display flag
+  u16 V1F = Menu[V_1].Flg & INVR;                            // V1 Cursor display flag
+  u16 V2F = Menu[V_2].Flg & INVR;                            // V2 Cursor display flag
+  u16 VtF = Menu[V_T].Flg & INVR;                            // Vt Cursor display flag
 
   FpsCnt++;
-  LCD_WrBlock(MIN_X, MIN_Y, MIN_X+X_SIZE, MIN_Y+Y_SIZE);          // 设显示区域
+  LCD_WrBlock(MIN_X, MIN_Y, MIN_X+X_SIZE, MIN_Y+Y_SIZE);          //Set display area
   for(u32 Col = X_BASE; Col <= X_SIZE; Col++){
-    u16* p = (Col & 1) ? Buf1 : Buf0;                             // 切换缓冲区
+    u16* p = (Col & 1) ? Buf1 : Buf0;                             // Switch buffer
     u32* p32 = (u32*)p;
     u16 Fill = (Col == X_BASE || Col == X_SIZE) ? GrC : BgC;
-    for(u32 i = X_BASE; i <= Y_SIZE/2; i++) p32[i] = Fill;        // 填充底色
-    p[Y_SIZE] = GrC, p[Y_BASE] = GrC;                             // 画上下框线
-    if(Col%30 == 0) for(u32 y = 5;  y < 200; y +=  5) p[y] = GrC; // 画竖格线
-    if(Col% 6 == 0) for(u32 x = 25; x < 200; x += 25) p[x] = GrC; // 画横格线
+    for(u32 i = X_BASE; i <= Y_SIZE/2; i++) p32[i] = Fill;        // Fill background color
+    p[Y_SIZE] = GrC, p[Y_BASE] = GrC;                             // Draw upper and lower borders
+    if(Col%30 == 0) for(u32 y = 5;  y < 200; y +=  5) p[y] = GrC; // Draw vertical lines
+    if(Col% 6 == 0) for(u32 x = 25; x < 200; x += 25) p[x] = GrC; // Draw horizontal lines
 
     if(Col != X_BASE && Col != X_SIZE){
       for(u32 n = 0; n < 4; n++){
         u32 m = Col*4+n;
         u32 Max[4], Min[4];
-        if(Track[m] != 0xFF){                                     // 非消隐状态
+        if(Track[m] != 0xFF){                                     // Non-blanking state
           Max[n] = Track[m], Min[n] = Track[m];
           if(Track[m] > Y_BASE && Track[m] < Y_SIZE){
             if(Track[m-4] < Y_BASE+1)
@@ -455,9 +455,9 @@ void DisplayWaveForm(void)
               Max[n] = Track[m-4];
             if(Min[n] == Max[n]){
               if(Min[n] > Y_BASE+1) Min[n]--;
-              if(Max[n] < Y_SIZE-1) Max[n]++;                     // 水平线加粗
+              if(Max[n] < Y_SIZE-1) Max[n]++;                     // Bold horizontal line
             }
-          } else {                                                // 超界处理,  修改界面时候要注意这个
+          } else {                                                // Transboundary processing,  Pay attention to this when modifying the interface
             if(Track[m] == Y_BASE && Track[m-4] > Y_BASE){
               Min[n] = Track[m-4], Max[n] = Track[m-4];
             }
@@ -466,33 +466,33 @@ void DisplayWaveForm(void)
             }
           }
           u16 TrkC = Palette[n];
-          if((Max[n]-Min[n]) > 5) TrkC &= 0xBDF7;                 // 亮度调整
+          if((Max[n]-Min[n]) > 5) TrkC &= 0xBDF7;                 // Brightness adjustment
           if(Col != X_BASE && Col != X_SIZE && !YnHide[n]){
             for(u32 y = Min[n]; y <= Max[n]; y++){
-              if(Min[n] > Y_BASE && Max[n] < Y_SIZE) p[y] |= TrkC;// 画波形轨迹
+              if(Min[n] > Y_BASE && Max[n] < Y_SIZE) p[y] |= TrkC;// Draw waveform trace
             }
           }
         }
       }
       if(Col%3 == 0) {
-        if(V1F) p[V1P] |= CsC;                               // 画 V1 游标线
-        if(V2F) p[V2P] |= CsC;                               // 画 V2 游标线
-        if(VtF) p[VtP] |= VtC;                               // 画 Vt 游标线
+        if(V1F) p[V1P] |= CsC;                               // Draw the V1 cursor line
+        if(V2F) p[V2P] |= CsC;                               // Draw V2 cursor line
+        if(VtF) p[VtP] |= VtC;                               // Draw Vt cursor line
       }
     } else {
-      p[V1P] |= CsC, p[V1P-1] |= CsC, p[V1P+1] |= CsC;       // 画 V1 游标端点
-      p[V2P] |= CsC, p[V2P-1] |= CsC, p[V2P+1] |= CsC;       // 画 V2 游标端点
-      p[VtP] |= VtC, p[VtP-1] |= VtC, p[VtP+1] |= VtC;       // 画 Vt 游标端点
+      p[V1P] |= CsC, p[V1P-1] |= CsC, p[V1P+1] |= CsC;       // Draw V1 cursor endpoint
+      p[V2P] |= CsC, p[V2P-1] |= CsC, p[V2P+1] |= CsC;       // Draw V2 cursor endpoint
+      p[VtP] |= VtC, p[VtP-1] |= VtC, p[VtP+1] |= VtC;       // Draw Vt cursor endpoint
     }
     if(Col == X_BASE+1 || Col == X_SIZE-1){
-      p[V1P] |= CsC, p[V2P] |= CsC, p[VtP] |= VtC;           // 画 V1,V2,Vt 端点
+      p[V1P] |= CsC, p[V2P] |= CsC, p[VtP] |= VtC;           // Draw V1, V2, Vt endpoints
     }
     if(Col == T1P && T1F)
-      for(u32 y = 1; y <= Y_SIZE; y += 3) p[y] |= CsC;       // 画 T1 游标线
+      for(u32 y = 1; y <= Y_SIZE; y += 3) p[y] |= CsC;       // Draw the T1 cursor line
     if(Col == T2P && T2F)
-      for(u32 y = 1; y <= Y_SIZE; y += 3) p[y] |= CsC;       // 画 T2 游标线
+      for(u32 y = 1; y <= Y_SIZE; y += 3) p[y] |= CsC;       // Draw the T2 cursor line
 
-    if((Col == T1P) || (Col == T2P)){                        // 画 T1~2 游标端点
+    if((Col == T1P) || (Col == T2P)){                        // Draw T1~2 cursor endpoint
       p[Y_SIZE] = CsC, p[Y_SIZE-1] = CsC;
       p[Y_BASE] = CsC, p[Y_BASE+1] = CsC;
     }
@@ -500,16 +500,16 @@ void DisplayWaveForm(void)
       p[Y_SIZE] = CsC, p[Y_BASE] = CsC;
     }
     if(Col == T0P){
-      if(T0F) for(u32 y = 1; y <= Y_SIZE; y += 3) p[y] |= VtC; // 画 T0 游标线
+      if(T0F) for(u32 y = 1; y <= Y_SIZE; y += 3) p[y] |= VtC; // Draw T0 cursor line
       p[Y_SIZE] = VtC, p[Y_SIZE-1] = VtC;
-      p[Y_BASE] = VtC, p[Y_BASE+1] = VtC;                      // 画 T0 游标端点
+      p[Y_BASE] = VtC, p[Y_BASE+1] = VtC;                      // Draw T0 cursor endpoint
     }
     if(Col == T0P-1 || Col == T0P+1){
       p[Y_SIZE] = VtC, p[Y_BASE] = VtC;
     }
     u32 *k = (Col-Bx1)*((By2-By1)/16)+PopBuf;
     if(PopHide == 0){
-      if(Col >= Bx1 && Col < Bx2){                             // 叠加弹出窗  画弹出框菜单
+      if(Col >= Bx1 && Col < Bx2){                             // Overlay pop-up window Draw pop-up menu
         for(u32 i = By1; i < By2; i += 16){
           for(u32 j = 0; j < 32; j += 2){
             u16 y = i+j/2;
@@ -525,7 +525,7 @@ void DisplayWaveForm(void)
   Hw.pLCD_DmaWait();
 }
 /*******************************************************************************
- Litimg: 缓冲区及显示窗口位置缩略图
+ Litimg: Buffer and display window position thumbnail
 *******************************************************************************/
 void Litimg(void)
 {
@@ -534,7 +534,7 @@ void Litimg(void)
 
   u16 ForeGrnd = Palette[XATTR], BackGrnd = Palette[BLANK];
   RowPosi(IMG_X0, IMG_Y0);
-  for(u32 n = 0; n < 24; n++){                         // 画缓冲区缩略图
+  for(u32 n = 0; n < 24; n++){                         // Draw buffer thumbnail
     u8* p = (u8*)BUF_IMG;
     for(u32 i = 0; i < 8; i++){
       for(u32 k = 0; k < 12; k++) WrPxl(((*p >> k) & 1) ? ForeGrnd : BackGrnd);
@@ -557,10 +557,10 @@ void Litimg(void)
 
   u16 T0Ptr = IMG_X0+1+(Menu[T_0].Val*30*24*8)/0x1000;
   LCD_WrBlock(T0Ptr-2, IMG_Y0+10, T0Ptr+3, IMG_Y0+11);
-  ForeGrnd = Palette[Menu[V_T].Src];                  // 由触发来源选择指针颜色
+  ForeGrnd = Palette[Menu[V_T].Src];                  // Select pointer color by trigger source
   for(u32 n = 0; n < 12; ++n) WrPxl(ForeGrnd);
   LCD_WrBlock(T0Ptr,IMG_Y0,  T0Ptr+1, IMG_Y0+9);
-  for(u32 n = 0; n < 20; ++n) WrPxl(ForeGrnd);        // 画触发位置指针标识
+  for(u32 n = 0; n < 20; ++n) WrPxl(ForeGrnd);        // Draw trigger position pointer identification
 }
 
 /******************************** END OF FILE *********************************/

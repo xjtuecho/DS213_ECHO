@@ -30,7 +30,7 @@
     u16 gp2312;
     u16 index;
   }font_map_t;
-  //--------------------------- 屏幕显示常数宏定义 -----------------------------
+  //--------------------------- Screen display constant macro definition -----------------------------
 
   #define WHT        0xFFFF
   #define CYAN       0xFFE0

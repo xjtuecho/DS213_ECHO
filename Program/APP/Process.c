@@ -12,7 +12,7 @@ void MeasureWaveForm(void);
 u16  WaveFormExtract(u16 Xposn);
 
 u8   Trigg = 0, ScrnF = 0, Full = 0, Psmpl = 0, Empty = 0, Frame = 0;
-u8   Recod[4*X_SIZE+1]; // 波形记录缓冲区（从文件读入或截屏的同时写入）
+u8   Recod[4*X_SIZE+1]; // Waveform recording buffer (read from file or write while taking screenshot)
 s16  MeasurY[4][9];     // [CH_A~D][MAX/MIN/VPP/RMS/AVG/D_V/VTH/B_V/ACT]
 u16  MeasurX[4][7];     // [CH_A~D][PTWH/PTWL/PCYC/CYCL/FPS]
 
@@ -21,7 +21,7 @@ u8   gDebugBuf[8] = {0};
 u16  posLast = 0;
 
 /*******************************************************************************
-  统计显示窗中各波形的最大最小值，单位为 Y 坐标点数
+  The maximum and minimum values of each waveform in the statistical display window, the unit is the number of Y coordinate points
 *******************************************************************************/
 void Y_Measure(void)
 {
@@ -71,7 +71,8 @@ void Y_Measure(void)
 }
 
 /*******************************************************************************
-  测量当前显示窗中指定 ChN 通道波形的有效值，单位为 Y 坐标点数
+  Measure the effective value of the waveform of the specified ChN channel in the 
+  current display window, the unit is the number of Y coordinate points
 *******************************************************************************/
 void RmsMeasure(u8 ChN)
 {
@@ -81,12 +82,12 @@ void RmsMeasure(u8 ChN)
   for(u32 x = X_BASE; x < X_SIZE; x++){
     s32 Yin = *ptr-Yn[ChN];
     Curr = (Yin > Mid) ? 1 : 0;
-    if(x > X_BASE){                          // 忽略第 1 项数据
-      if(BgnF != 0) Ssum += Yin*Yin, Xcnt++; // 周期开始后累加平方值
-      if(Last != Curr){                      // 有跳变产生
+    if(x > X_BASE){                          // Ignore the first data
+      if(BgnF != 0) Ssum += Yin*Yin, Xcnt++; // Cumulative squared value after the start of the period
+      if(Last != Curr){                      // There is a jump
         u32 Flag = Last*2+Curr;
-        if(BgnF == Flag)   Savg = Ssum/Xcnt; // 第 n 周期结束计算平均值
-        else if(BgnF == 0) BgnF = Flag;      // 第 0 周期开始置起始标志
+        if(BgnF == Flag)   Savg = Ssum/Xcnt; // Calculate the average value at the end of the nth period
+        else if(BgnF == 0) BgnF = Flag;      // Set the start flag at the beginning of the 0th cycle
       }
     }
     Last = Curr, ptr += 4;
@@ -94,7 +95,8 @@ void RmsMeasure(u8 ChN)
   MeasurY[ChN][RMS] = Sqrt32(Savg);
 }
 /*******************************************************************************
-  测量当前显示窗中指定通道波形的时间参数，单位为 X 坐标点数
+  Measure the time parameter of the waveform of the specified channel in the 
+  current display window, the unit is the number of X coordinate points
 *******************************************************************************/
 void TimMeasure(u8 ChN)
 {
@@ -107,25 +109,25 @@ void TimMeasure(u8 ChN)
   for(u32 x = X_BASE; x < X_SIZE; x++){
     if(*ptr > Mid+5) Curr = 1;
     if(*ptr < Mid-5) Curr = 0;
-    if(x > X_BASE){                                   // 忽略第 1 项数据
-      Xcnt++;                                         // 脉宽计数+1
-      if(Last != Curr){                               // 有跳变产生
+    if(x > X_BASE){                                   // Ignore the first data
+      Xcnt++;                                         // Pulse width count+1
+      if(Last != Curr){                               // There is a jump
         u32 Flag = Last*2+Curr;
-        if(BgnF == 0) BgnF = Flag;                    // 第 0 周期起始标志
+        if(BgnF == 0) BgnF = Flag;                    // Cycle 0 start flag
         else {
-          if(Curr == 0) SumH += Xcnt;                 // 累加正脉宽
-          else          SumL += Xcnt;                 // 累加负脉宽
-          if(BgnF == Flag){                           // 第 n 整数周期结束
-            TwsN++;                                   // 周期数+1
-            TwsH = SumH, TwsL = SumL;                 // 保存高低脉宽计数
+          if(Curr == 0) SumH += Xcnt;                 // Cumulative positive pulse width
+          else          SumL += Xcnt;                 // Cumulative negative pulse width
+          if(BgnF == Flag){                           // End of nth integer period
+            TwsN++;                                   // Number of cycles+1
+            TwsH = SumH, TwsL = SumL;                 // Save high and low pulse width count
           }
         }
-        Xcnt = 0;                                     // 脉宽计数清零
+        Xcnt = 0;                                     // Clear pulse width count
       }
     }
     Last = Curr, ptr += 4;
   }
-  u32 Mask = (TwsN != 0 && TwsN < 30)? 100 : 0;       // 为保证精度预乘 100
+  u32 Mask = (TwsN != 0 && TwsN < 30)? 100 : 0;       // Premultiplied to ensure accuracy 100
   MeasurX[ChN][PTWH] = Mask*TwsH/TwsN;
   MeasurX[ChN][PTWL] = Mask*TwsL/TwsN;
   MeasurX[ChN][CYCL] = Mask*(TwsH+TwsL)/TwsN;
@@ -136,10 +138,10 @@ void TimMeasure(u8 ChN)
 }
 void MeasureWaveForm(void)
 {
-  Y_Measure();                                        // 垂直方向值的测量
-  if(Menu[VM1].Val == RMS) RmsMeasure(Menu[VM1].Src); // 垂直方向的有效值
+  Y_Measure();                                        // Vertical value measurement
+  if(Menu[VM1].Val == RMS) RmsMeasure(Menu[VM1].Src); // Valid value in vertical direction
   if(Menu[VM2].Val == RMS) RmsMeasure(Menu[VM2].Src);
-  if(Menu[TM1].Val != D_T) TimMeasure(Menu[TM1].Src); // 水平方向值的测量
+  if(Menu[TM1].Val != D_T) TimMeasure(Menu[TM1].Src); // Measurement of horizontal value
   if(Menu[TM2].Val != D_T) TimMeasure(Menu[TM2].Src);
 }
 
@@ -167,7 +169,7 @@ void WaveFormRoll(u16 pos)
 }
 
 /*******************************************************************************
-  显示同步处理
+  Display synchronization
 *******************************************************************************/
 void DispSync(void)
 {
@@ -181,59 +183,59 @@ void DispSync(void)
   u32 SyncM = Menu[SYN].Val;
   u32 Tbase = Menu[TIM].Val;
   u32 Xposn = Menu[XNP].Val;
-  u32 ViewP = 30*Xposn*BASE_KP1[Tbase]/1024;         // 插值补偿后窗口位置
+  u32 ViewP = 30*Xposn*BASE_KP1[Tbase]/1024;         // Window position after interpolation compensation
   u32 Npts = 0;
   switch(SyncM){
     case AUTO:
-      // 时基 >= 200ms/div 使用滚屏模式
+      // Time base >= 200ms/div Use scroll mode
       if(Tbase <= ROLL_200MS){
         if(SMPL == Menu[RUN].Val){
-          Npts = WaveFormExtract(0);                 // 从头开始提取
+          Npts = WaveFormExtract(0);                 // Extract from scratch
           WaveFormRoll(Npts);
         }
       } else {
         if(Trigg || (!Trigg && ScrnF && SMPL == Menu[RUN].Val)){
-          Npts = WaveFormExtract(ViewP);             // 从指定窗口位置开始提取
+          Npts = WaveFormExtract(ViewP);             // Extract from the specified window position
         }
       }
-      DisplayWaveForm();                             // 显示提取的波形
+      DisplayWaveForm();                             // Display the extracted waveform
       MeasureWaveForm();
       if(X_SIZE == Npts){
-        SmplStart();                                 // 重新采样
+        SmplStart();                                 // Resample
       }
       break;
     case NORM:
       if(Trigg){
-        Npts = WaveFormExtract(ViewP);               // 从指定窗口位置开始提取
+        Npts = WaveFormExtract(ViewP);               // Extract from the specified window position
       }
-      DisplayWaveForm();                             // 显示提取的波形
+      DisplayWaveForm();                             // Display the extracted waveform
       MeasureWaveForm();
       if(X_SIZE == Npts){
-        SmplStart();                                 // 重新采样
+        SmplStart();                                 // Resample
       }
       break;
     case SNGL:
       if(Trigg){
-        Npts = WaveFormExtract(ViewP);               // 从指定窗口位置开始提取
+        Npts = WaveFormExtract(ViewP);               // Extract from the specified window position
       } else {
-        TrackClr();                                  // 清除波形轨迹
+        TrackClr();                                  // Clear waveform trace
       }
       if(Full){
-        Menu[RUN].Val  = STOP,                       // 满屏后暂停
-        Menu[RUN].Flg |= UPDT;                       // 刷新显示暂停标志
+        Menu[RUN].Val  = STOP,                       // Pause after full screen
+        Menu[RUN].Flg |= UPDT;                       // Refresh display pause sign
       }
-      DisplayWaveForm();                             // 显示提取的波形
+      DisplayWaveForm();                             // Display the extracted waveform
       MeasureWaveForm();
       break;
     case ROLL:
       if(SMPL == Menu[RUN].Val){
-        Npts = WaveFormExtract(0);                   // 从头开始提取
+        Npts = WaveFormExtract(0);                   // Extract from scratch
         WaveFormRoll(Npts);
       }
-      DisplayWaveForm();                             // 显示提取的波形
+      DisplayWaveForm();                             // Display the extracted waveform
       MeasureWaveForm();
       if(X_SIZE == Npts){
-        SmplStart();                                 // 重新采样
+        SmplStart();                                 // Resample
       }
       break;
     default:
@@ -241,35 +243,35 @@ void DispSync(void)
   }
 }
 /*******************************************************************************
-  显示波形数据限幅
+  Display waveform data limit
 *******************************************************************************/
 u16 DataLimit(s16 Data)
 {
   return ((Data >= Y_SIZE)? Y_SIZE : (Data <= Y_BASE) ? Y_BASE : Data);
 }
 
-// 判断是否滚屏模式
+// Determine whether the scrolling mode
 u8 isSynRoll(void)
 {
   return (ROLL == Menu[SYN].Val || (AUTO == Menu[SYN].Val && Menu[TIM].Val <= ROLL_200MS)) ? 1 : 0;
 }
 
 /*******************************************************************************
-  显示波形提取与插值
+  Display waveform extraction and interpolation
 *******************************************************************************/
 u16 WaveFormExtract(u16 Xposn)
 {
-  FPGA_DataWr(A_C_CH, SMPL_RPTR, Xposn);              // 当前窗口位置读指针
+  FPGA_DataWr(A_C_CH, SMPL_RPTR, Xposn);              // Current window position read pointer
   FPGA_DataWr(B_D_CH, SMPL_RPTR, Xposn);
 
-  s32 GainA  = pGain[CH_A*10+Menu[RNA].Val];          // A 通道当前档位增益系数
-  s32 GainB  = pGain[CH_B*10+Menu[RNB].Val];          // B 通道当前档位增益系数
-  u32 Posn1  = Yn[TRCK1], Posn2 = Yn[TRCK2];          // 波形轨迹 1, 2 垂直零位
-  u32 Posn3  = Yn[TRCK3], Posn4 = Yn[TRCK4];          // 波形轨迹 3, 4 垂直零位
+  s32 GainA  = pGain[CH_A*10+Menu[RNA].Val];          // A Channel current gear gain coefficient
+  s32 GainB  = pGain[CH_B*10+Menu[RNB].Val];          // B Channel current gear gain coefficient
+  u32 Posn1  = Yn[TRCK1], Posn2 = Yn[TRCK2];          // Waveform trace 1, 2 vertical zero position
+  u32 Posn3  = Yn[TRCK3], Posn4 = Yn[TRCK4];          // Waveform trace 3, 4 vertical zero position
 
-  s32 i = BASE_KP1[Menu[TIM].Val];                    // 当前档位插值系数
-  u32 n = Menu[T3S].Val;                              // n = 2~7 对应于各类运算
-  u32 m = Menu[T4S].Val;                              // m = 2~5 对应于记录 0~3
+  s32 i = BASE_KP1[Menu[TIM].Val];                    // Current gear interpolation coefficient
+  u32 n = Menu[T3S].Val;                              // n = 2~7 Corresponding to various operations
+  u32 m = Menu[T4S].Val;                              // m = 2~5 Corresponds to record 0~3
   u8* q = (u8*)&Recod[m-2];
   u32 r = Recod[4*359+m-2];
   u32 x = 0, k, LastA, LastB, LastC, LastD;
@@ -288,18 +290,18 @@ u16 WaveFormExtract(u16 Xposn)
     Full  = (Status & FULL ) ? 1 : 0;
     Psmpl = (Status & PSMPL) ? 1 : 0;
     Empty = (Status & EMPTY) ? 1 : 0;
-    if(Empty) return x;                                // 缓冲区读空即退出
+    if(Empty) return x;                                // Exit when the buffer is empty
 
-    s32 AmplA = CALIBRATE((SmplAC >> 8)-Posn1, GainA); // A 通道振幅提取校正
-    u32 CurrA = DataLimit(AmplA+Posn1);                // A 通道显示数据限幅
-    s32 AmplB = CALIBRATE((SmplBD >> 8)-Posn2, GainB); // B 通道振幅提取校正
-    u32 CurrB = DataLimit(AmplB+Posn2);                // B 通道显示数据限幅
+    s32 AmplA = CALIBRATE((SmplAC >> 8)-Posn1, GainA); // A Channel amplitude extraction correction
+    u32 CurrA = DataLimit(AmplA+Posn1);                // A Channel display data limit
+    s32 AmplB = CALIBRATE((SmplBD >> 8)-Posn2, GainB); // B Channel amplitude extraction correction
+    u32 CurrB = DataLimit(AmplB+Posn2);                // B Channel display data limit
 
-    s32 AmplD = (m > 1) ? *q-r : (SmplBD & 1)*D_AMPL;  // D 通道提取
-    u32 CurrD = DataLimit(AmplD+Posn4);                // D 通道显示数据限幅
+    s32 AmplD = (m > 1) ? *q-r : (SmplBD & 1)*D_AMPL;  // D Channel extraction
+    u32 CurrD = DataLimit(AmplD+Posn4);                // D Channel display data limit
 
-    s32 AmplC = (SmplAC & 1)*C_AMPL;                   // C 通道振幅提取
-    switch (n){                                        // C 通道运算
+    s32 AmplC = (SmplAC & 1)*C_AMPL;                   // C Channel amplitude extraction
+    switch (n){                                        // C Channel computing
       case A_ADD_B: AmplC = AmplA + AmplB; break;
       case A_SUB_B: AmplC = AmplA - AmplB; break;
       case C_AND_D: AmplC = AmplC & AmplD; break;
@@ -307,16 +309,16 @@ u16 WaveFormExtract(u16 Xposn)
       case INV_A:   AmplC = -AmplA; break;
       case INV_B:   AmplC = -AmplB; break;
     }
-    u32 CurrC = DataLimit(AmplC+Posn3);                // C 通道显示数据限幅
+    u32 CurrC = DataLimit(AmplC+Posn3);                // C Channel display data limit
 
-    if(x == X_BASE){                                   // 数值初始化
+    if(x == X_BASE){                                   // Numerical initialization
       *p++ = CurrA, *p++ = CurrB, *p++ = CurrC, *p++ = CurrD;
       k = 0, x++;
     } else {
     #if 1
       s32 DiffA = CurrA-LastA, DiffB = CurrB-LastB;
       s32 DiffC = CurrC-LastC, DiffD = CurrD-LastD;
-      while(k <= 1024){                                // 插值运算
+      while(k <= 1024){                                // Interpolation
         if(m > 1) q += 4;
         u32 InstA = LastA+DiffA*k/1024, InstB = LastB+DiffB*k/1024;
         *p++ = InstA, *p++ = InstB;
@@ -345,8 +347,8 @@ void CtrlUpdate(u8 Item)
   switch(Item){
     case RUN:
       if(Menu[RUN].Val == SMPL){
-        SmplStart();                             // 重新开始采样
-        TrackClr();                              // 清除显示波形轨迹
+        SmplStart();                             // Restart sampling
+        TrackClr();                              // Clear display waveform trace
       }
       break;
     case CPA:
@@ -373,7 +375,7 @@ void CtrlUpdate(u8 Item)
       SetOffsetB(Menu[RNB].Val, Yn[CH_B]);
       break;
     case T_0:
-      SetPreSmplDpth(Value*30);                  // 预采样深度
+      SetPreSmplDpth(Value*30);                  // Pre-sampling depth
       break;
     case V_T:
       FPGA_ByteWr(A_C_CH, TRIG_VOLT, Vt[CH_A]);

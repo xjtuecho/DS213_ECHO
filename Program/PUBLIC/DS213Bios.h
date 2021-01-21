@@ -24,25 +24,25 @@
   void __BiosInit(u32 pDrv);
   void SetLicence(u16 x, u16 y);
 
-  //-------------------- DevInit(u16 Dev)函数中 Dev 宏定义 ---------------------
+  //-------------------- DevInit(u16 Dev)Dev macro definition in the function ---------------------
 
   enum {
-    PWRCTRL, // 电源控制设备
-    KEYnDEV, // 按键类输入设备
-    BUZZDEV, // 蜂鸣器设备
-    DISPDEV, // LCD 显示设备
-    USB_DEV, // USB 通信设备
-    USB_SCI, // SCI 通信设备
-    USBDISK, // USB Disk 设备
-    FPGADEV, // FPGA 接口设备
-    FPGACFG, // FPGA 上电配置
-    SGNL_IN, // 信号输入通道
-    SGNLOUT, // 信号输出通道
-    SO_ANLG, // 模拟信号输出
-    SO_DGTL, // 数字信号输出
+    PWRCTRL, // Power control equipment
+    KEYnDEV, // Key input device
+    BUZZDEV, // Buzzer device
+    DISPDEV, // LCD display screen
+    USB_DEV, // USB communication device
+    USB_SCI, // SCI communication device
+    USBDISK, // USB Disk equipment
+    FPGADEV, // FPGA Interface device
+    FPGACFG, // FPGA Power-on configuration
+    SGNL_IN, // Signal input channel
+    SGNLOUT, // Signal output channel
+    SO_ANLG, // Analog signal output
+    SO_DGTL, // Digital signal output
   };
 
-//-------------------------------- 显示相关定义 --------------------------------
+//-------------------------------- Display related definitions --------------------------------
 
   #define WHT        0xFFFF
   #define CYAN       0xFFE0
@@ -56,10 +56,10 @@
   #define RED        0x001F
   #define BLK        0x0000
 
-  #define CHAR       0x00   //  Standard Display 字符显示
-  #define INVR       0x01   //  Inverse Display  反转显示
-  #define SYMB       0x02   //  Symbol Display   符号显示
-  #define VOID       0x04   //  Dotted Display   虚影显示
+  #define CHAR       0x00   //  Standard Display Character display
+  #define INVR       0x01   //  Inverse Display  Reverse display
+  #define SYMB       0x02   //  Symbol Display   Symbol display
+  #define VOID       0x04   //  Dotted Display   Ghost display
 
 #endif
 /********************************* END OF FILE ********************************/

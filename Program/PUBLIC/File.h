@@ -16,17 +16,17 @@
   #define PAGE_2                  2
   #define PAGE_3                  3
 
-  #define OK                      0 // 操作完成
-  #define SEC_ERR                 1 // 扇区读写错误
-  #define FAT_ERR                 2 // FAT表读写错误
-  #define OVER                    3 // 操作溢出
-  #define NEW                     4 // 空白/新目录项
-  #define EMPT                    4 // 文件不存在
-  #define VER_ERR                 5 // 版本错误
-  #define SUM_ERR                 6 // 校验和错误
-  #define RD_ERR                  8 // 扇区读错误
-  #define WR_ERR                  9 // 扇区写错误
-  #define DISK_ERR                10 // 磁盘错误
+  #define OK                      0 // Operation complete
+  #define SEC_ERR                 1 // Sector read and write error
+  #define FAT_ERR                 2 // FAT table read and write error
+  #define OVER                    3 // Operation overflow
+  #define NEW                     4 // Blank/new catalog item
+  #define EMPT                    4 // file does not exist
+  #define VER_ERR                 5 // Wrong version
+  #define SUM_ERR                 6 // Checksum error
+  #define RD_ERR                  8 // Sector read error
+  #define WR_ERR                  9 // Sector write error
+  #define DISK_ERR                10 // Disk error
 
   extern uc8 F_NAME[][12];
   extern u8  TrckBuf[];

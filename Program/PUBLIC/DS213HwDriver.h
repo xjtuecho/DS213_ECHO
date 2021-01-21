@@ -11,7 +11,7 @@
   typedef  u32  (*pFunc4)(u32 i, u32 j, u32 k, u32 n);
 
   typedef struct
-  { //------------------------------ SYS 相关定义 ------------------------------
+  { //------------------------------ SYS Related definitions ------------------------------
 
     u8*    pHwVerStr;       // pStr = Hw.pHwVerStr
     u8*    pDfuVerStr;      // pStr = Hw.pDfuVerStr
@@ -46,7 +46,7 @@
     pFunc2 pMcuFlashWr4B;   // Hw.pMcuFlashWr4B(u32 Addr, u32 Data);
     pFunc2 pMcuFlashWr2B;   // Hw.pMcuFlashWr2B(u32 Addr, u16 Data);
 
-    //---------------------------- 电源控制相关定义 ----------------------------
+    //---------------------------- Definition of power control ----------------------------
 
     vu8*   pOut_PEn;        // *Hw.pOut_PEn = 0/1
     vu8*   pOut_nPD;        // *Hw.pOut_nPD = 0/1
@@ -58,12 +58,12 @@
     u32    Vbty_Scale;      // Word = Hw.VBTY_SCALE
     pFunc1 pPowerDown;      // Hw.pPowerDown(u8 NewState); ENABLE/DISABLE
 
-    //--------------------------- 蜂鸣器设备相关定义 ---------------------------
+    //--------------------------- Definition of buzzer device ---------------------------
 
     vu16*  pBuz_Vol;        // *Hw.pBuz_Vol  = 0~100
     vu16*  pBuz_Dev;        // *Hw.pBuz_Dev(|= ENBL) or (&= ~ENBL)
 
-    //--------------------------- 按键类设备相关定义 ---------------------------
+    //--------------------------- Key device related definitions ---------------------------
 
     u8*   pK1_St;           // Bit = *Hw.pK1_St
     u8*   pK2_St;           // Bit = *Hw.pK2_St
@@ -74,7 +74,7 @@
     u8*   pEc_St;           // Bit = *Hw.pEc_St
     u8*   pEd_St;           // Bit = *Hw.pEd_St
 
-    //---------------------------- 显示设备相关定义 ----------------------------
+    //---------------------------- Display device related definition ----------------------------
 
     vu16*  pPwm_Bkl;        // *Hw.pPwm_Bkl  = 0~100
     vu8*   pOut_nRST;       // *Hw.pOut_nRST = 0/1
@@ -98,7 +98,7 @@
     pFunc2 pLCD_DmaFill;    // Hw.pLCD_DmaFill(u32 SrcAddr, u16 n);
     pFunc2 pLCD_DmaSend;    // Hw.pLCD_DmaSend(u32 SrcAddr, u16 n);
 
-    //--------------------------- FPGA 控制相关定义 ----------------------------
+    //--------------------------- FPGA Control related definitions ----------------------------
 
     u32    Fpga_Spi;        // Hw.Fpga_Spi = &pDev
     vu8*   pOut_Clr;        // *Hw.pOut_Clr  = 0/1
@@ -108,20 +108,20 @@
     vu8*   pSt_Done0;       // Bit = *Hw.pSt_Done0
     vu8*   pSt_Done1;       // Bit = *Hw.pSt_Done1
 
-    //--------------------------- SPI 控制相关定义 -----------------------------
+    //--------------------------- SPI Control related definitions -----------------------------
 
     pFunc4 pSpiComm;        // Hw.pSpiComm(u32 DevBase, u8 Cmd, u32 BufBase, u32 n);
     pFunc3 pSpiWrBuf;       // Hw.pSpiWrBuf(u32 DevBase, u32 BufBase, u32 n);
     pFunc2 pSpiRdWrByte;    // Hw.pSpiRdWrByte(u32 DevBase, u8 Byte);
     pFunc1 pSpiComplete;    // Hw.pSpiComplete(u32 DevBase);
 
-    //--------------------------- USB 控制相关定义 -----------------------------
+    //--------------------------- USB Control related definitions -----------------------------
 
     pFunc1 pUSB_Pwr;        // Hw.pUSB_Pwr(u8 NewState); ENABLE/DISABLE
     vu8*   pOut_SCD;        // *Hw.pOUT_SCD = 0/1
     vu8*   pOut_SCP;        // *Hw.pOUT_SCP = 0/1
 
-    //-------------------------- DISK 控制相关定义 -----------------------------
+    //-------------------------- DISK Control related definitions -----------------------------
 
     vu8*   pOut_nSS2;       // *Hw.pOut_nSS2 = 0/1
     u32    Disk_Spi;        // Hw.Disk_Spi   = &pDev
@@ -131,7 +131,7 @@
     pFunc3 pSpiFlashSecW;   // Hw.pSpiFlashSecW(u32 BufBase, u32 WrAddr, u16 SecSize);
     pFunc3 pSpiFlashRead;   // Hw.pSpiFlashRead(u32 BufBase, u32 RdAddr, u16 n);
 
-    //------------------------- 信号输入控制相关定义 ---------------------------
+    //------------------------- Definition of signal input control ---------------------------
 
     vu8*   pOut_A_Coupl;    // *Hw.pOut_A_Coupl  = 0/1
     vu8*   pOut_B_Coupl;    // *Hw.pOut_B_Coupl  = 0/1
@@ -148,7 +148,7 @@
     vu16*  pCh_A_Posn;      // *Hw.pCh_A_Posn = 0~1023
     vu16*  pCh_B_Posn;      // *Hw.pCh_B_Posn = 0~1023
 
-    //------------------------- 信号输出控制相关定义 ---------------------------
+    //------------------------- Definition of signal output control ---------------------------
 
     vu16*  pFout_TIM_PSC;   // *Hw.pFout_TIM_PSC  = Data
     vu16*  pFout_TIM_ARR;   // *Hw.pFout_TIM_ARR  = Data

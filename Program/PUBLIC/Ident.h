@@ -2,10 +2,10 @@
  Ident.h Ver 2.0                                        Author : bure
 ********************************************************************************
 
- * 调用时需要外部提供的硬件相关宏定义如下：
+ * The hardware-related macro definitions that need to be provided externally when calling are as follows：
 
-   #define TYPE_DS201 / TYPE_DS203 / ...   产品型号
-   #define LIC_REC      0x08xxxxxx         Licence 存放地址
+   #define TYPE_DS201 / TYPE_DS203 / ...   Product number
+   #define LIC_REC      0x08xxxxxx         Licence Storage address
 
 *******************************************************************************/
 #ifndef __IDENT_H
@@ -17,12 +17,12 @@
     #include "stm32f10x.h"
   #endif
 
-  #define TYPE_LA104    // 暂时借用 LA104 的 Lic 解锁识别号
+  #define TYPE_LA104    // Temporarily borrow the Lic unlocking identification number of LA104
 //  #define TYPE_DS213
 
   #define LIC_REC        0x080000FC
 
- // 采用统一名称可供外部调用的函数如下：
+ // The functions that can be called externally with a uniform name are as follows：
 
   u32 Dev_SN(u32 Base);
   u32 AnswerCode(void);

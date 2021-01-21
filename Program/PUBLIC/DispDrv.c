@@ -6,7 +6,7 @@ void DispPosn8x14(u16 x, u16 y);
 void DispStr8x14(u16 ForeGrnd, u16 BackGrnd, u8 Mode, u32 StrBase);
 void DispLogo(u16 x0, u16 y0);
 
-uc16 FONT_8x14[] = {    // 标准字库
+uc16 FONT_8x14[] = {    // Standard font
     0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000, // _
     0x0000,0x0000,0x1C00,0x3F60,0x3F60,0x1C00,0x0000,0x0000, // !
     0x0000,0x7000,0x7800,0x0000,0x0000,0x0000,0x7800,0x7000, // "
@@ -106,7 +106,7 @@ uc16 FONT_8x14[] = {    // 标准字库
 };
 
 /*******************************************************************************
- Clear_Screen: 清LCD显示器屏幕。
+ Clear_Screen: Clear the LCD monitor screen.
 *******************************************************************************/
 void ClrScrn(u16 Color)
 {
@@ -117,14 +117,14 @@ void ClrScrn(u16 Color)
   LCD_DmaWait();
 }
 /*******************************************************************************
-  屏幕显示字符串  Mode: 0/1 => CHAR/INVR
+  Screen display string  Mode: 0/1 => CHAR/INVR
 *******************************************************************************/
 void DispPosn8x14(u16 x, u16 y)
 {
   LCD_W_Block(x, y, COL_SIZE-1, y+13);
 }
 /*******************************************************************************
-  屏幕显示字符串  Mode: 0/1 => CHAR/INVR
+  Screen display string  Mode: 0/1 => CHAR/INVR
 *******************************************************************************/
 void DispStr8x14(u16 ForeGrnd, u16 BackGrnd, u8 Mode, u32 StrBase)
 {
@@ -141,31 +141,31 @@ void DispStr8x14(u16 ForeGrnd, u16 BackGrnd, u8 Mode, u32 StrBase)
     Str++;
   }
   u8 n = 14;
-  while(n--) *pLCD_DB_W = BLK;  // 字符串后增加一空白列
+  while(n--) *pLCD_DB_W = BLK;  // Add a blank column after the string
 }
 /*******************************************************************************
- Display_Logo: 在指定位置显示商标图案   输入: X、Y坐标
+ Display_Logo: Display the trademark pattern at the specified position Input: X, Y coordinates
 --------------------------------------------------------------------------------
-LOGO文件格式为 16 色 64*256 的 BMP 文件，但扩展名改为 .INF
- 0x00~0x09: 文件类型 2B,大小 4B, 保留 4B, 0x0A~0x0D: 文件头到实际图像数据的偏移
- 0x36~0x75: 调色板(每色 4B, 顺序为 B, G, R, Alpha)
- 0x0076~0x2075: 8kB, 16k 点图像数据
+The LOGO file format is a BMP file with 16 colors and 64*256, but the extension is changed to .INF
+ 0x00~0x09: File type 2B, size 4B, reserved 4B, 0x0A~0x0D: offset from file header to actual image data
+ 0x36~0x75: Palette (4B per color, the order is B, G, R, Alpha)
+ 0x0076~0x2075: 8kB, 16k Point image data
 *******************************************************************************/
 void DispLogo(u16 x0, u16 y0)
 {
   u16 Color[16];
   u8 *p = (u8*)0x0807D800;//&LOGO_BASE;
   u16 x = x0+256;
-  for(u16 i = 0; i < 16; i++){ // 0x36~0x75: 调色板(每色 4B, 顺序为 B, G, R, Alpha)
+  for(u16 i = 0; i < 16; i++){ // 0x36~0x75: Palette (4B per color, the order is B, G, R, Alpha)
     Color[i] = ((p[0x36+i*4]>> 3)<< 11)+((p[0x37+i*4]>> 2)<< 5)+(p[0x38+i*4]>> 3);
   }
   p += 0x76;
   for(u16 i = 0; i < 128; i++){
     x = x0+i*2;
     LCD_Posn(x, y0);
-    for(u16 j = 0; j < 64; j++) *pLCD_DB_W = Color[p[i+j*128]>> 4]; // 高半字节
+    for(u16 j = 0; j < 64; j++) *pLCD_DB_W = Color[p[i+j*128]>> 4]; // High nibble
     LCD_Posn(x + 1, y0);
-    for(u16 j = 0; j < 64; j++) *pLCD_DB_W = Color[p[i+j*128]& 15]; // 低半字节
+    for(u16 j = 0; j < 64; j++) *pLCD_DB_W = Color[p[i+j*128]& 15]; // Lower nibble
   }
 }
 

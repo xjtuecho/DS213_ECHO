@@ -11,24 +11,24 @@
   #endif
 
   typedef struct {
-    uc8* STR;      // 该项显示的字符串指针
-    uc16 X0;       // 该项显示的水平起始位置
-    uc16 Y0;       // 该项显示的垂直起始位置
-    uc16 Min;      // 该项变量的最小设置值
-    uc16 Max;      // 该项变量的最大设置值
-    u16  Val;      // 该项变量值
-    u8   Src;      // 该项变量的来源编号
-    u8   Flg;      // 控制标志
+    uc8* STR;      // The string pointer displayed by this item
+    uc16 X0;       // The horizontal starting position of the item display
+    uc16 Y0;       // The vertical starting position of the item display
+    uc16 Min;      // The minimum setting value of the variable
+    uc16 Max;      // The maximum setting value of the variable
+    u16  Val;      // The variable value
+    u8   Src;      // Source number of the variable
+    u8   Flg;      // Control flag
   } uimenu;
 
   typedef enum {
-//  CHAR = 0x00,   // 该项内容正常显示
-//  INVR = 0x01,   // 该项内容反衬显示
-//  HIDE = 0x04,   // 不显示该项内容
+//  CHAR = 0x00,   // The content is displayed normally
+//  INVR = 0x01,   // This item is highlighted
+//  HIDE = 0x04,   // Don't show this item
     FLSH = 0x04,   // Flashing
-    UPDT = 0x08,   // 刷新显示该项内容
-    LOOP = 0x10,   // Value 值在调节到头时循环, 否则停止
-    SLCT = 0x80,   // 根据 Value 选择显示字符串
+    UPDT = 0x08,   // Refresh display item
+    LOOP = 0x10,   // Value loops when the adjustment reaches the end, otherwise it stops
+    SLCT = 0x80,   // Select the display string according to Value
     FNUM = 0x40,
     PCNT = 0x20,
     TCNT = 0x01,
@@ -66,8 +66,8 @@
   #define SAW        2
   #define DGTL       3
 
-  #define DC_10      3      //对应选中DA10倍的档位
-  #define AC_10      4      //对应选中DA10倍的档位
+  #define DC_10      3      //Corresponding to the gear selected DA10 times
+  #define AC_10      4      //Corresponding to the gear selected DA10 times
 
   extern uimenu Menu[], Pop[];
   extern uc8    DGTL_PSC[], ANLG_PSC[], XNP_MAX[], V_RANGE[][8];

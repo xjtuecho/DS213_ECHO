@@ -122,15 +122,15 @@ uc8  TIP2[][11]   = {"to Confirm", "Completed ","  Error   "};
 
 u8   PopUpdt = 0;
 
-//......................... 以下为可以保存与读出的工作参数 .....................
+// . The following are the working parameters that can be saved and read out
 
 //=================+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+
-// 偏移误差校正    | 10mv| 20mv| 50mv| 0.1v| 0.2v| 0.5v|  1v |  2v |  5v | 10v |
+// Offset error correction    | 10mv| 20mv| 50mv| 0.1v| 0.2v| 0.5v|  1v |  2v |  5v | 10v |
 //=================+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+
 u16 Diff[][10] =  {{ 436,  407,  390,  386,  383,  411,  395,  387,  384,  386},
                    { 421,  406,  396,  392,  391,  419,  404,  396,  393,  394}};
 //=================+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+
-// 增益误差校正    | 10mv| 20mv| 50mv| 0.1v| 0.2v| 0.5v|  1v |  2v |  5v | 10v |
+// Gain error correction    | 10mv| 20mv| 50mv| 0.1v| 0.2v| 0.5v|  1v |  2v |  5v | 10v |
 //=================+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+
 u16 Gain0[][10] = {{1143, 1126, 1092, 1088, 1041, 1126, 1109, 1104, 1098, 1056},
                    {1143, 1126, 1109, 1088, 1041, 1126, 1109, 1109, 1136, 1040}};
@@ -142,14 +142,14 @@ u16 Gain2[][10] = {{1118, 1105, 1101, 1101, 1056, 1139, 1125, 1127, 1119, 1062},
 //=================+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+
 u16* pGain; // Hw.pAdcTypStr == AD9288->Gain0, HW9288->Gain1, MXT2088->Gain2
 
-u16 Slope[2]   =  { 2157, 2157,}; // 斜率校正系数
+u16 Slope[2]   =  { 2157, 2157,}; // Slope correction factor
 
 u16 Vt[4] = {160, 80, 51, 21};
 u16 Yn[4] = {150, 75, 50, 25};
 u16 Item  = VM1;                  // Limit 0 ~ VM1
-u16 Line  = 0;                    // Limit 0 ~ 10  弹出窗内当前命令行
+u16 Line  = 0;                    // Limit 0 ~ 10  The current command line in the pop-up window
 
-uimenu Pop[]   = {//........ Val, Src, Flag 为可以保存与读出的工作参数
+uimenu Pop[]   = {//........ Val, Src, Flag Working parameters that can be saved and read out
 //==============+====+====+====+====+=====+======+===================+
 //|     pStr    | x0 | y0 | >= | <= | Val |  Src |       Flag        |
 //==============+====+====+====+====+=====+======+===================+
@@ -165,7 +165,7 @@ uimenu Pop[]   = {//........ Val, Src, Flag 为可以保存与读出的工作参
 //==============+====+====+====+====+=====+======+===================+
 };
 
-uimenu Menu[] = {//......... Val, Src, Flag 为可以保存与读出的工作参数
+uimenu Menu[] = {//......... Val, Src, Flag Working parameters that can be saved and read out
 //==============+====+====+====+====+=====+======+===================+
 //|     pStr    | x0 | y0 | >= | <= | Val |  Src |       Flag        |
 //==============+====+====+====+====+=====+======+===================+
@@ -231,7 +231,7 @@ void updata_RNAB_p(void)
 }
 
 /*******************************************************************************
-  更新主界面菜单显示
+  Update the main interface menu display
 *******************************************************************************/
 void UpdtMainMenu(void)
 {
@@ -249,24 +249,24 @@ void UpdtMainMenu(void)
     }
     if(Flag & (UPDT | FLSH)){
       if(Flag & UPDT){
-        CtrlUpdate(i);                                 // 更新硬件设置
-        if(i == V_T || i == T_0 || i == XNP) Litimg(); // 更新缓冲区缩略图
+        CtrlUpdate(i);                                 // Update hardware settings
+        if(i == V_T || i == T_0 || i == XNP) Litimg(); // Update buffer thumbnail
       }
-      UpdateTag();                                     // 更新信号标签
-      Menu[i].Flg &= ~(UPDT | FLSH);                   // 清除更新标志
-      RowPosi(Menu[i].X0, Menu[i].Y0);                 // 设置显示测量数值 在这设置显示区域的大小位置
+      UpdateTag();                                     // Update signal label
+      Menu[i].Flg &= ~(UPDT | FLSH);                   // Clear update flag
+      RowPosi(Menu[i].X0, Menu[i].Y0);                 // Set the displayed measurement value. Set the size and position of the display area here
       u32 Indx = Menu[i].Val;
       u32 MxEn = (i >= TM2 && i <= VM1) ? 1 : 0;
       u32 Mssk = (Indx == D_V || Indx == B_V || Indx == D_T || Indx == FPS) ? MxEn : 0;
       u32 Ch_N = (Mssk) ? 0 : Menu[i].Src;
-      u32 Numb = (Mssk) ? TXT1C : Ch_N;                // 更改显示色号
+      u32 Numb = (Mssk) ? TXT1C : Ch_N;                // Change the display color number
       u32 Slct = (Flag & SLCT) ? 0x08 : 0x00;
-      u8* pStr = (u8*)Menu[i].STR+Indx*Slct;           // 标提字符串指针
+      u8* pStr = (u8*)Menu[i].STR+Indx*Slct;           // String pointer
       u32 Mode = (Flag & INVR) ? INVR : CHAR;
-      if(Numb == N_2_W) Numb = Indx ? NORMO : WARNG;   // 自动转换警示色
-      PrintStr(Numb, Mode, pStr);                      // 显示标提字符串
+      if(Numb == N_2_W) Numb = Indx ? NORMO : WARNG;   // Automatically switch warning colors
+      PrintStr(Numb, Mode, pStr);                      // Display the standard string
 
-//===========================刷新下方左下角两个信息框============================
+//===========================Refresh the two information boxes in the lower left corner below============================
       if(i == VM1 || i == VM2){
         u32 ChAB = Ch_N & 1;
         if(!MeasurY[ChAB][ACT] && Indx <= AVG)
@@ -276,9 +276,9 @@ void UpdtMainMenu(void)
           u32 Yscale = (Indx == B_V) ? 1000 : Yrange;
           s32 Ymeter = Yscale*MeasurY[ChAB][Indx];
 
-          // 处理衰减10倍
-          // ChAb判断当前是A通道还是B通道显示
-          // 3和4对应选中衰减10倍
+          // Processing attenuation 10 times
+          // ChAb determines whether it is currently displayed on channel A or channel B
+          // 3 and 4 correspond to selected attenuation 10 times
           if(0 == ChAB && B_V != Indx && (DC_10 == Menu[CPA].Val || AC_10 == Menu[CPA].Val)){
             Ymeter *= 10;
           }
@@ -286,11 +286,11 @@ void UpdtMainMenu(void)
             Ymeter *= 10;
           }
 
-          Int32String_sign(&Num, Ymeter);               // 转带符号三位有效数字串
-          AddStr(Numb, Mode, Num.str);                  // 显示测量数值
-          AddStr(Numb, Mode, (u8*)&V_UNIT[Num.decPos]); // 显示电压测量量纲
+          Int32String_sign(&Num, Ymeter);               // Signed string of three significant digits
+          AddStr(Numb, Mode, Num.str);                  // Display measurement value
+          AddStr(Numb, Mode, (u8*)&V_UNIT[Num.decPos]); // Display voltage measurement dimension
         }
-//==================================显示右下角两个框的内容================================
+//=========Display the contents of the two boxes in the lower right corner=============
       } else if(i == TM1 || i == TM2){
         u16* pS = &MeasurX[Ch_N][Indx];
         if(*pS == 0)
@@ -333,8 +333,8 @@ void UpdtMainMenu(void)
             default:
               break;
           }
-          AddStr(Numb, Mode, Num.str);                      // 显示测量数值
-          AddStr(Numb, Mode, (u8*)pM);                      // 显示测量量纲
+          AddStr(Numb, Mode, Num.str);                      // Display measurement value
+          AddStr(Numb, Mode, (u8*)pM);                      // Display measurement dimension
         }
       }
     }
