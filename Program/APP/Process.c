@@ -152,7 +152,7 @@ void DispDebugStr(void)
   AddStr(TXT2C, CHAR, gDebugBuf);
 }
 
-// 波形滚动处理
+// Wave scroll processing
 void WaveFormRoll(u16 pos)
 {
   u32 *src = (u32*)TrackRoll;

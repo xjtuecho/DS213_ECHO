@@ -141,7 +141,7 @@ void SysInt(void)
         }
         *Hw.pPwm_LED = LED_Pwm;
       }
-      if(CursorCnt++ >= 12){                             // 12*20mS = 240mS 闪烁
+      if(CursorCnt++ >= 12){                             // 12*20mS = 240mS Flashing
         CursorCnt = 0;
         Flashing = (Flashing) ? 0 : 1;
         Vsum = Vsum-Vsum/8+*Hw.pAdc_Vbty*375/256;        // 8 Order smoothing filter
